@@ -12,4 +12,4 @@ Please use Github issues for bug reports and requests. To contribute directly, o
 If you see something that can be improved, please contribute or contact us!
 
 ## License
-MIT, see the [LICENSE] file (https://github.com/topoi-lang/topoi/blob/master/LICENSE)
+MIT, see the [LICENSE](https://github.com/topoi-lang/topoi/blob/master/LICENSE) file.
