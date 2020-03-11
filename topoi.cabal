@@ -4,13 +4,13 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 3a520222db69adb0df4f7d88cbfe30e199444ec2997157ab6b9d55799814acd5
+-- hash: 329c15a2a66e5aec3bf6efeefe5275b9a1889dc356f52ef8fb1cdfb5c98a5574
 
 name:           topoi
 version:        0.1.0.0
 category:       Compiler, Language
 bug-reports:    https://github.com/topoi-lang/topoi/issues
-author:         Zheng Yan PEH
+author:         Topoi team
 maintainer:     zypeh.geek@gmail.com
 copyright:      Copyright (c) 2020, Topoi-lang
 license:        MIT
@@ -26,6 +26,7 @@ executable topoi
       MyLib
   hs-source-dirs:
       compiler/src
+  default-extensions: OverloadedStrings
   ghc-options: -Wall -Wextra -threaded -rtsopts -with-rtsopts=-N
   build-depends:
       base >=4.7 && <5
