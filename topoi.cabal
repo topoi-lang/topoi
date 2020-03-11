@@ -1,33 +1,32 @@
-cabal-version:       2.4
+cabal-version: 1.12
 
-name:                topoi
-version:             0.1.0.0
--- synopsis:
--- description:
-bug-reports:         https://github.com/topoi-lang/topoi/issues
-license:             MIT
-license-file:        LICENSE
-author:              Zheng Yan PEH
-maintainer:          zypeh.geek@gmail.com
-copyright:           Copyright (c) 2020, Topoi-lang
-category:            Compiler, Language
-extra-source-files:  README.md
+-- This file has been generated from package.yaml by hpack version 0.31.2.
+--
+-- see: https://github.com/sol/hpack
+--
+-- hash: 3a520222db69adb0df4f7d88cbfe30e199444ec2997157ab6b9d55799814acd5
 
-common haskell
-  default-language: Haskell2010
-  ghc-options:
-    -Weverything
-    -Wno-name-shadowing
+name:           topoi
+version:        0.1.0.0
+category:       Compiler, Language
+bug-reports:    https://github.com/topoi-lang/topoi/issues
+author:         Zheng Yan PEH
+maintainer:     zypeh.geek@gmail.com
+copyright:      Copyright (c) 2020, Topoi-lang
+license:        MIT
+license-file:   LICENSE
+tested-with:    GHC == 8.8.2
+build-type:     Simple
+extra-source-files:
+    README.md
 
 executable topoi
-  import: haskell
-  hs-source-dirs:
-    compiler/src
-
-  main-is:
-    Main.hs
-
+  main-is: Main.hs
   other-modules:
-    MyLib
-
-  build-depends:       base ^>=4.12.0.0
+      MyLib
+  hs-source-dirs:
+      compiler/src
+  ghc-options: -Wall -Wextra -threaded -rtsopts -with-rtsopts=-N
+  build-depends:
+      base >=4.7 && <5
+  default-language: Haskell2010

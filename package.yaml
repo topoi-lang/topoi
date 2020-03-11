@@ -1,0 +1,30 @@
+name:               topoi
+version:            0.1.0.0
+bug-reports:        https://github.com/topoi-lang/topoi/issues
+license:            MIT
+license-file:       LICENSE
+author:             Topoi team
+maintainer:         zypeh.geek@gmail.com
+copyright:          Copyright (c) 2020, Topoi-lang
+category:           Compiler, Language
+extra-source-files: README.md
+
+tested-with:        GHC == 8.8.2
+
+dependencies:
+- base >= 4.7 && < 5
+
+default-extensions:
+- OverloadedStrings
+
+executables:
+  topoi:
+    source-dirs:   compiler/src
+    main:          Main.hs
+    other-modules: MyLib
+    ghc-options:
+      - -Wall
+      - -Wextra
+      - -threaded
+      - -rtsopts
+      - -with-rtsopts=-N
