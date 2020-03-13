@@ -9,10 +9,11 @@ copyright:          Copyright (c) 2020, Topoi-lang
 category:           Compiler, Language
 extra-source-files: README.md
 
-tested-with:        GHC == 8.8.2
+tested-with:        GHC == 8.8.2 # lts-15.3
 
 dependencies:
-- base >= 4.7 && < 5
+- base-noprelude >= 4.7 && < 5
+- relude         >= 0.6.0.0
 
 default-extensions:
 - OverloadedStrings
@@ -21,7 +22,9 @@ executables:
   topoi:
     source-dirs:   compiler/src
     main:          Main.hs
-    other-modules: MyLib
+    other-modules:
+      MyLib
+      Prelude
     ghc-options:
       - -Wall
       - -Wextra

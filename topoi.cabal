@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 329c15a2a66e5aec3bf6efeefe5275b9a1889dc356f52ef8fb1cdfb5c98a5574
+-- hash: 1c7fbb4109138b77bb65ecacd86766473415d5cbc6c1dadc75864759a603102c
 
 name:           topoi
 version:        0.1.0.0
@@ -23,11 +23,12 @@ extra-source-files:
 executable topoi
   main-is: Main.hs
   other-modules:
-      MyLib
+      MyLib Prelude
   hs-source-dirs:
       compiler/src
   default-extensions: OverloadedStrings
   ghc-options: -Wall -Wextra -threaded -rtsopts -with-rtsopts=-N
   build-depends:
-      base >=4.7 && <5
+      base-noprelude >=4.7 && <5
+    , relude >=0.6.0.0
   default-language: Haskell2010
