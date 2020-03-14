@@ -13,18 +13,23 @@ tested-with:        GHC == 8.8.2 # lts-15.3
 
 dependencies:
 - base-noprelude >= 4.7 && < 5
+- co-log         >= 0.4.0.0
 - relude         >= 0.6.0.0
 
 default-extensions:
 - OverloadedStrings
+- GeneralizedNewtypeDeriving
 
 executables:
   topoi:
-    source-dirs:   compiler/src
+    source-dirs:
+      compiler/src
+      terminal/src
     main:          Main.hs
     other-modules:
-      MyLib
       Prelude
+      App.Monad
+      App.Env
     ghc-options:
       - -Wall
       - -Wextra
