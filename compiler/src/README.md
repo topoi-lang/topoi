@@ -5,7 +5,6 @@
 ```
 compiler/src
 ├── App            # This is the application monad
-├── Prelude.hs     # This is the custom prelude that share to whole repo
 ```
 
 ## Details description

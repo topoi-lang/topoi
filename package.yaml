@@ -12,9 +12,14 @@ extra-source-files: README.md
 tested-with:        GHC == 8.8.2 # lts-15.3
 
 dependencies:
-- base-noprelude >= 4.7 && < 5
-- co-log         >= 0.4.0.0
-- relude         >= 0.6.0.0
+- base >= 4.7 && < 5
+- co-log >= 0.4.0
+- lexer-applicative
+- megaparsec >= 8.0.0
+- mtl >= 2.2.2
+- regex-applicative >= 0.3.3
+- text >= 1.2.4
+- unordered-containers >= 0.2.10
 
 default-extensions:
 - OverloadedStrings
@@ -27,9 +32,9 @@ executables:
       terminal/src
     main:          Main.hs
     other-modules:
-      Prelude
       App.Monad
       App.Env
+      Parse.Sexpr
     ghc-options:
       - -Wall
       - -Wextra
