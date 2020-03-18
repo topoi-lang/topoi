@@ -1,7 +1,0 @@
-resolver: lts-15.3 # GHC 8.8.2
-
-packages:
-- .
-
-extra-deps:
-- lexer-applicative-2.1.0.2
