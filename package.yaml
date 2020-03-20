@@ -13,6 +13,7 @@ tested-with:        GHC == 8.8.2 # lts-15.3
 
 dependencies:
 - base >= 4.7 && < 5
+- bytestring >= 0.10
 - lexer-applicative
 - megaparsec >= 8.0.0
 - regex-applicative >= 0.3.3
@@ -30,6 +31,12 @@ executables:
       # compiler/src
       # terminal/src
     main:          Main.hs
+    exposed_modules:
+      Parse.Internal
+      Parse.SExpression
+      Parse.Space
+      Reporting.Annotation
+      Reporting.Error.Syntax
     ghc-options:
       - -Wall
       - -Wextra
