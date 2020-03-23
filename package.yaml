@@ -20,21 +20,20 @@ dependencies:
 - text >= 1.2.4
 - unordered-containers >= 0.2.10
 
-default-extensions:
-- OverloadedStrings
-- GeneralizedNewtypeDeriving
-
 executables:
   topoi:
     source-dirs:
       src
-      # compiler/src
-      # terminal/src
     main:          Main.hs
     exposed_modules:
-      Parse.Internal
+      AST.Source
+
+      Parse.Primitives
       Parse.SExpression
       Parse.Space
+      Parse.String
+      Parse.CharacterCodes
+
       Reporting.Annotation
       Reporting.Error.Syntax
     ghc-options:

@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 5b73390f7eddbbec9829c83cd048a2d109e50a99ffc49ccea65ee396711a1e98
+-- hash: 976f779d2d70e37045f06bff63daf8e300d33a59addde367360f54ffc19ab88c
 
 name:           topoi
 version:        0.1.0.0
@@ -24,16 +24,17 @@ executable topoi
   main-is: Main.hs
   other-modules:
       AST
-      Parse.Internal
+      AST.Source
+      Parse.CharacterCodes
+      Parse.Primitives
       Parse.SExpression
       Parse.Space
+      Parse.String
       Reporting.Annotation
       Reporting.Error.Syntax
-      Syntax.Sexpr
       Paths_topoi
   hs-source-dirs:
       src
-  default-extensions: OverloadedStrings GeneralizedNewtypeDeriving
   ghc-options: -Wall -Wextra -threaded -rtsopts -with-rtsopts=-N
   build-depends:
       base >=4.7 && <5
