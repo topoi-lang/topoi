@@ -6,6 +6,8 @@ module Parse.Primitives where
 
 import qualified Data.ByteString.Internal as B
 import Data.Word (Word16, Word8)
+import Foreign.Ptr (Ptr)
+import Foreign.Storable (peek)
 import qualified Reporting.Annotation as A
 
 type Row = Word16
@@ -95,6 +97,6 @@ getPosition = Parser $ \state@(State _ _ _ _ row col) _ eok _ _ ->
 addEnd :: A.Position -> a -> Parser x (A.Located a)
 addEnd start value = Parser $ \state@(State _ _ _ _ row col) _ eok _ _ ->
   eok (A.at start (A.Position row col) value) state
--- unsafeIndex :: Ptr Word8 -> Word8
--- unsafeIndex ptr =
---   B.accursedUnutterablePerformIO (peek ptr)
+
+unsafeIndex :: Ptr Word8 -> Word8
+unsafeIndex ptr = B.accursedUnutterablePerformIO (peek ptr)

@@ -1,6 +1,6 @@
-module AST.Source (Expr (..)) where
+module AST.Source (SExpr (..)) where
 
-data Expr
+data SExpr
   = Atom String -- We treat atom as string
   | Int Int
   | Float Double

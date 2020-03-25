@@ -4,18 +4,19 @@ module Parse.String where
 
 import Data.Word (Word8)
 import Foreign.Ptr (Ptr)
-import Parse.Primitives
+import qualified Parse.CharacterCodes as C
+import qualified Parse.Primitives as P
+import Parse.Primitives (Col, Parser, Row)
 import qualified Reporting.Error.Syntax as Err
-
-string ::
-  (Row -> Col -> x) ->
-  (Err.String -> Row -> Col -> x) ->
-  Parser x String
-string = undefined
-
--- string toExpectation toError =
---   Parser $ \(State src pos end indent row col) cok _ cerr eerr ->
 
 isDoubleQuote :: Ptr Word8 -> Ptr Word8 -> Bool
 isDoubleQuote pos end =
-  pos < end && P.unsafeIndex pos == 0x22 {- " -}
+  pos < end && P.unsafeIndex pos == C.doubleQuote
+
+isSingleQuote :: Ptr Word8 -> Ptr Word8 -> Bool
+isSingleQuote pos end =
+  pos < end && P.unsafeIndex pos == C.singleQuote
+
+data AtomResult
+  = Good (Ptr Word8) Row Col !String
+  | Bad Row Col Err.Atom

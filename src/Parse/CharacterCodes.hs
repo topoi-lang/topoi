@@ -27,3 +27,11 @@ _z = 0x7A :: Word8
 _A = 0x41 :: Word8
 
 _Z = 0x5A :: Word8
+
+doubleQuote = 0x22 :: Word8
+
+singleQuote = 0x27 :: Word8
+
+parenLeft = 0x28 :: Word8
+
+parenRight = 0x29 :: Word8
