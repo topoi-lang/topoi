@@ -24,7 +24,7 @@ executables:
   topoi:
     source-dirs:
       src
-    main:          Main.hs
+    main:          Terminal/Main.hs
     exposed_modules:
       AST.Source
 
