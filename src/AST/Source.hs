@@ -1,8 +1,11 @@
-module AST.Source (SExpr (..)) where
+module AST.Source where
 
-data SExpr
-  = Atom String -- We treat atom as string
-  | Int Int
-  | Float Double
-  | Op String
-  | Unit
+-- import Data.Text (Text)
+
+data Expr = Unary OP Expr Expr
+
+data OP
+  = OPCons
+  | OPCar
+  | OPCdr
+  deriving (Eq)
