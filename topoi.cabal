@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: dd9d3bb3043ffc79d0ee19d53059fac00bbb45b3185138f0a86d8d023124b372
+-- hash: e69895e3094879110111644f8272ff98b2b3cd85dcf7ae9e6755b7e126a36dcb
 
 name:           topoi
 version:        0.1.0.0
@@ -23,6 +23,7 @@ extra-source-files:
 executable topoi
   main-is: Terminal/Main.hs
   other-modules:
+      Analyze.Typecheck
       AST
       AST.Source
       Parse.CharacterCodes
