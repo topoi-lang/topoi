@@ -1,6 +1,6 @@
 module AST.Source where
 
--- import Data.Text (Text)
+import Data.Text (Text)
 
 data TypedExpr
   = TypedExpr
@@ -18,14 +18,16 @@ data ExprType
       { universe :: Int
       }
   | ConstructedType
-      { name :: String,
+      { name :: Text,
         typeArgs :: [ExprType]
       }
 
 data Expr
-  = Atom String
-  | Variable String
-  | FunctionApplication
-      { function :: TypedExpr,
-        argument :: TypedExpr
-      }
+  = Atom Text
+  | Number Int
+  | Function Text [Expr]
+  deriving (Show)
+  -- | FunctionApplication
+      -- { function :: TypedExpr,
+        -- argument :: TypedExpr
+      -- }

@@ -10,20 +10,21 @@ module Parse.SExpression where
 -- import qualified Reporting.Annotation as A
 -- import qualified Reporting.Error.Syntax as Err
 
+import qualified AST.Source as AST
+import Data.Char
+import Data.Either
 import Data.Text (Text)
 import qualified Data.Text as T
 import qualified Data.Text.Encoding as T
-import Data.Either
 import Data.Text.Read (decimal)
-import Data.Char
 
-data Token = TokOpen | TokClose | TokSymbol Text | TokInt Int
+data Token = TokOpen | TokClose | TokSymbol Text | TokInt Int | TokAtom Text
 
-data Expression
-  = ExpList [Expression]
-  | ExpSymbol Text
-  | ExpInt Int
-  -- | ExpAtom Text  -- shalt we ?
+data SExpr
+  = SList [SExpr]
+  | SSym Text
+  | SInt Int
+  | SAtom Text
   deriving (Show)
 
 -- NOTE: always use Text package to represent the unicode strings
@@ -37,30 +38,46 @@ tokenize (T.uncons -> Just (x, xs))
   | x == '(' = TokOpen : tokenize xs
   | x == ')' = TokClose : tokenize xs
   | isSpace x = tokenize xs
-  | isTopoiOperator x = TokSymbol (consumeAndConcat x isTopoiOperator xs) : tokenize (T.dropWhile isTopoiOperator xs)
   | isNumber x = TokInt (fst . fromRight (0, "") . decimal $ consumeAndConcat x isNumber xs) : tokenize (T.dropWhile isNumber xs)
+  | isTopoiOperator x =
+    if T.head sym == '\'' && T.length sym > 1
+      then TokAtom (T.drop 1 sym) : tokenize (T.dropWhile isTopoiOperator xs)
+      else TokSymbol sym : tokenize (T.dropWhile isTopoiOperator xs)
   | otherwise = error $ "unexpected character: " ++ [x]
   where
+    sym = (consumeAndConcat x isTopoiOperator xs)
     isTopoiOperator :: Char -> Bool
     isTopoiOperator c = isAlphaNum c || elem c ("'=+-*/<>%" :: [Char])
-
     consumeAndConcat :: Char -> (Char -> Bool) -> Text -> Text
     consumeAndConcat firstChar predicate theRestOfText = T.concat [T.pack [firstChar], T.takeWhile predicate theRestOfText]
 tokenize _ = undefined
 
-nestOne :: [Token] -> ([Expression], [Token])
+nestOne :: [Token] -> ([SExpr], [Token])
 nestOne [] = ([], [])
-nestOne (TokSymbol sym : tokens) = ([ExpSymbol sym], tokens)
-nestOne (TokInt int : tokens) = ([ExpInt int], tokens)
-nestOne (TokOpen : tokens) = let (expressions, tokens') = nestMany [] tokens in ([ExpList expressions], tokens')
+nestOne (TokAtom sym : tokens) = ([SAtom sym], tokens)
+nestOne (TokSymbol sym : tokens) = ([SSym sym], tokens)
+nestOne (TokInt int : tokens) = ([SInt int], tokens)
+nestOne (TokOpen : tokens) = let (expressions, tokens') = nestMany [] tokens in ([SList expressions], tokens')
 nestOne (TokClose : tokens) = ([], tokens)
 
-nestMany :: [Expression] -> [Token] -> ([Expression], [Token])
+nestMany :: [SExpr] -> [Token] -> ([SExpr], [Token])
 nestMany prev tokens = case nestOne tokens of
   ([], tokens') -> (prev, tokens')
   (expressions, tokens') -> nestMany (prev ++ expressions) tokens'
 
-nest :: [Token] -> Expression
+nest :: [Token] -> [SExpr]
 nest tokens = case nestMany [] tokens of
-  (expressions, []) -> ExpList $ ExpSymbol "Seq" : expressions
+  (expressions, []) -> expressions
+  -- shall we?
+  -- (expressions, []) -> SList $ SSym "Seq" : expressions
   _ -> error "unregconized expression"
+
+parse :: SExpr -> AST.Expr
+parse (SList (fn : xs)) = AST.Function (parseSymbol fn) (parse <$> xs)
+parse (SInt x) = AST.Number x
+parse (SAtom x) = AST.Atom x
+parse _ = undefined
+
+parseSymbol :: SExpr -> Text
+parseSymbol (SSym x) = x
+parseSymbol _ = error "internal error occurred"

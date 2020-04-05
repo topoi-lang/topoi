@@ -12,4 +12,4 @@ main :: IO ()
 main = do
   (arg : _) <- getArgs
   sourceFile <- BS.readFile arg
-  print . SExpr.nest . SExpr.tokenize . T.decodeUtf8 $ sourceFile
+  print $ SExpr.parse <$> (SExpr.nest . SExpr.tokenize . T.decodeUtf8 $ sourceFile)
