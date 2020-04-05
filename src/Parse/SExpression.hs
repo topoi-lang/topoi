@@ -15,7 +15,6 @@ import Data.Char
 import Data.Either
 import Data.Text (Text)
 import qualified Data.Text as T
-import qualified Data.Text.Encoding as T
 import Data.Text.Read (decimal)
 
 data Token = TokOpen | TokClose | TokSymbol Text | TokInt Int | TokAtom Text
@@ -68,16 +67,15 @@ nestMany prev tokens = case nestOne tokens of
 nest :: [Token] -> [SExpr]
 nest tokens = case nestMany [] tokens of
   (expressions, []) -> expressions
-  -- shall we?
-  -- (expressions, []) -> SList $ SSym "Seq" : expressions
   _ -> error "unregconized expression"
 
 parse :: SExpr -> AST.Expr
-parse (SList (fn : xs)) = AST.Function (parseSymbol fn) (parse <$> xs)
+parse (SList []) = AST.Unit
+parse (SList (fn : xs)) = AST.Function (parseSymbolTakeName fn) (parse <$> xs)
 parse (SInt x) = AST.Number x
 parse (SAtom x) = AST.Atom x
-parse _ = undefined
+parse (SSym _) = error "stray symbol in the parsing pass"
 
-parseSymbol :: SExpr -> Text
-parseSymbol (SSym x) = x
-parseSymbol _ = error "internal error occurred"
+parseSymbolTakeName :: SExpr -> Text
+parseSymbolTakeName (SSym x) = x
+parseSymbolTakeName _ = error "internal error occurred"

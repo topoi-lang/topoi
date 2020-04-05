@@ -23,7 +23,8 @@ data ExprType
       }
 
 data Expr
-  = Atom Text
+  = Unit
+  | Atom Text
   | Number Int
   | Function Text [Expr]
   deriving (Show)
