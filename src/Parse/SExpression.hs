@@ -3,13 +3,6 @@
 
 module Parse.SExpression where
 
--- import qualified AST.Source as Src
--- import qualified Parse.CharacterCodes as C
--- import Parse.Primitives
--- import qualified Parse.Space as Space
--- import qualified Reporting.Annotation as A
--- import qualified Reporting.Error.Syntax as Err
-
 import qualified AST.Source as AST
 import Data.Char
 import Data.Either
@@ -48,7 +41,7 @@ tokenize (T.uncons -> Just (x, xs))
     isTopoiOperator :: Char -> Bool
     isTopoiOperator c = isAlphaNum c || elem c ("'=+-*/<>%" :: [Char])
     consumeAndConcat :: Char -> (Char -> Bool) -> Text -> Text
-    consumeAndConcat firstChar predicate theRestOfText = T.concat [T.pack [firstChar], T.takeWhile predicate theRestOfText]
+    consumeAndConcat firstChar predicate theRestOfText = T.concat [T.singleton firstChar, T.takeWhile predicate theRestOfText]
 tokenize _ = undefined
 
 nestOne :: [Token] -> ([SExpr], [Token])

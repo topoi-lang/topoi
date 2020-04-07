@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: e69895e3094879110111644f8272ff98b2b3cd85dcf7ae9e6755b7e126a36dcb
+-- hash: f6510fcf69a4b3aa392f00bc08cee6f23400b39813e805ec42c9f7ab6a36b622
 
 name:           topoi
 version:        0.1.0.0
@@ -26,11 +26,10 @@ executable topoi
       Analyze.Typecheck
       AST
       AST.Source
-      Parse.CharacterCodes
-      Parse.Primitives
+      Parse.Lexer
       Parse.SExpression
-      Parse.Space
-      Parse.String
+      Parse.SExprParser
+      Parse.TokenStream
       Reporting.Annotation
       Reporting.Error.Syntax
       Paths_topoi
@@ -43,6 +42,7 @@ executable topoi
     , lexer-applicative
     , megaparsec >=8.0.0
     , regex-applicative >=0.3.3
+    , srcloc >=0.5
     , text >=1.2.4
     , unordered-containers >=0.2.10
   default-language: Haskell2010

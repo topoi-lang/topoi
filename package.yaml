@@ -17,6 +17,7 @@ dependencies:
 - lexer-applicative
 - megaparsec >= 8.0.0
 - regex-applicative >= 0.3.3
+- srcloc >= 0.5
 - text >= 1.2.4
 - unordered-containers >= 0.2.10
 
@@ -28,11 +29,10 @@ executables:
     exposed_modules:
       AST.Source
 
-      Parse.Primitives
+      Parse.Lexer
       Parse.SExpression
-      Parse.Space
-      Parse.String
-      Parse.CharacterCodes
+      Parse.SExprParser
+      Parse.TokenStream
 
       Reporting.Annotation
       Reporting.Error.Syntax
