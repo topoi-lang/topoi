@@ -1,20 +1,40 @@
 module Reporting.Annotation where
 
-{- TODO: should remove this Position and importing SrcLoc haskell package -}
-import Data.Word (Word16)
+import Control.Monad.State
+import Data.IntMap (IntMap)
+import qualified Data.IntMap as IntMap
+import Data.IntSet (IntSet)
+import qualified Data.IntSet as IntSet
+import Data.Loc
 
--- | Position type
-data Position
-  = Position
-      {-# UNPACK #-} !Word16
-      {-# UNPACK #-} !Word16
+data ID = Int
 
-data Region
-  = Region
-      {-# UNPACK #-} !Position
-      {-# UNPACK #-} !Position
+-- | This is to bookkeeping the state of the source location
+-- | for error recorvery
+type PosLog token = State (LocState token) -- { Identity }
 
-data Located a = At Region a
+data LocState token
+  = LocState
+      { currentLoc :: Loc, -- current Loc mark
+        lastToken :: Maybe token, -- the last accepted token
+        opened :: IntSet, -- waiting to be moved to the "logged" map when the starting position of the next token is determined
+        logged :: IntMap Loc, -- waiting to be removed when the ending position is determined
+        index :: Int -- for generating fresh ids
+      }
 
-at :: Position -> Position -> a -> Located a
-at start end value = At (Region start end) value
+runPosLog :: State (LocState token) a -> a
+runPosLog f = evalState f (LocState NoLoc Nothing IntSet.empty IntMap.empty 0)
+
+updateLoc :: Loc -> PosLog token ()
+updateLoc loc = do
+  set <- gets opened
+  let addedLoc = IntMap.fromSet (const loc) set
+  modify $ \st ->
+    st
+      { currentLoc = loc,
+        opened = IntSet.empty,
+        logged = IntMap.union (logged st) addedLoc
+      }
+
+updateToken :: token -> PosLog token ()
+updateToken tok = modify $ \st -> st {lastToken = Just tok}

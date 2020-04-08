@@ -14,8 +14,10 @@ tested-with:        GHC == 8.8.2 # lts-15.3
 dependencies:
 - base >= 4.7 && < 5
 - bytestring >= 0.10
+- containers
 - lexer-applicative
 - megaparsec >= 8.0.0
+- mtl
 - regex-applicative >= 0.3.3
 - srcloc >= 0.5
 - text >= 1.2.4
@@ -35,7 +37,6 @@ executables:
       Parse.TokenStream
 
       Reporting.Annotation
-      Reporting.Error.Syntax
     ghc-options:
       - -Wall
       - -Wextra
