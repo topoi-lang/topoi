@@ -23,6 +23,7 @@ data Tok
   | TokAtom Text
   | TokIdent Text
   | TokInt Int
+  deriving (Eq, Ord)
 
 instance Show Tok where
   show tok = case tok of
