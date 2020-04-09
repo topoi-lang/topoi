@@ -35,6 +35,7 @@ executables:
       Parse.SExpression
       Parse.SExprParser
       Parse.TokenStream
+      Parse.Combinator
 
       Reporting.Annotation
     ghc-options:

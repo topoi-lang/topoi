@@ -7,7 +7,7 @@ import Data.IntSet (IntSet)
 import qualified Data.IntSet as IntSet
 import Data.Loc
 
-data ID = Int
+type ID = Int
 
 -- | This is to bookkeeping the state of the source location
 -- | for error recorvery
@@ -38,3 +38,33 @@ updateLoc loc = do
 
 updateToken :: token -> PosLog token ()
 updateToken tok = modify $ \st -> st {lastToken = Just tok}
+
+-- Now here are naive ways to keep track of region and position of source
+-- location.
+
+-- | Marking the start of the range of source location
+-- returns an ID
+markStart :: PosLog token ID
+markStart = do
+  i <- gets index
+  modify $ \st ->
+    st
+      { index = succ i,
+        opened = IntSet.insert i (opened st)
+      }
+  pure i
+
+-- | Returns the range of the source location
+-- and deletes them
+markEnd :: ID -> PosLog token Loc
+markEnd i = do
+  end <- gets currentLoc
+  loggedPos <- gets logged
+  let loc = case IntMap.lookup i loggedPos of
+        Nothing -> NoLoc
+        Just start -> start <--> end
+  modify $ \st ->
+    st
+      { logged = IntMap.delete i loggedPos
+      }
+  pure loc
