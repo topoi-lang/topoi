@@ -98,6 +98,8 @@ scan filepath = filterError . runLexer lexer filepath . Text.unpack
     filterError (TsError (Lexer.LexicalError pos)) = Left pos
 
 instance PrettyToken Tok where
+  restoreToken = show
+
   prettyTokens (x :| []) = fromMaybe ("'" <> show (unLoc x) <> "'") (prettyToken' (unLoc x))
   prettyTokens xs = "\"" <> concatMap (f . unLoc) (NE.toList xs) <> "\""
     where
