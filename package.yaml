@@ -31,11 +31,11 @@ executables:
     exposed_modules:
       AST.Source
 
+      Parse.Combinator
       Parse.Lexer
       Parse.SExpression
       Parse.SExprParser
       Parse.TokenStream
-      Parse.Combinator
 
       Reporting.Annotation
     ghc-options:
