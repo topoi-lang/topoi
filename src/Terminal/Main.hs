@@ -1,15 +1,20 @@
+{-# LANGUAGE OverloadedStrings #-}
+
 module Main where
 
-import qualified Data.ByteString as BS
-import qualified Data.Text.Encoding as T
-import qualified Parse.SExpression as SExpr
+import Data.Either (fromRight)
+import qualified Data.Text.IO as Text
+import Parse.Lexer
+import Parse.SExprParser
 import System.Environment (getArgs)
-
--- NOTE: https://www.snoyman.com/blog/2016/12/beware-of-readfile
--- Use ByteString.Lazy if it is a *really* big file.
 
 main :: IO ()
 main = do
   (arg : _) <- getArgs
-  sourceFile <- BS.readFile arg
-  print $ SExpr.parse <$> (SExpr.nest . SExpr.tokenize . T.decodeUtf8 $ sourceFile)
+  sourceFile <- Text.readFile arg
+  putStrLn "-- Tokens --"
+  let tokens = scan arg sourceFile
+  print tokens
+  putStrLn "-- Parse Tree --"
+  let csTree = parse expressionList arg (fromRight undefined tokens)
+  print csTree

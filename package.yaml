@@ -29,11 +29,8 @@ executables:
       src
     main:          Terminal/Main.hs
     exposed_modules:
-      AST.Source
-
       Parse.Combinator
       Parse.Lexer
-      Parse.SExpression
       Parse.SExprParser
       Parse.TokenStream
 

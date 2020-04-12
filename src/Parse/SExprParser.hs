@@ -83,4 +83,21 @@ expressionList =
     <?> "list of expressions"
 
 expression :: Parser Expr
-expression = undefined
+expression =
+  PC.takeLoc $
+    choice
+      [ Var <$> ident,
+        Lit <$> literal
+      ]
+  where
+    ident :: Parser VarName
+    ident =
+      PC.takeLoc (VarName <$> identifierName)
+        <?> "identifier"
+    literal :: Parser Lit
+    literal =
+      choice
+        [ Num <$> integer,
+          Str <$> atomName
+        ]
+        <?> "literal"

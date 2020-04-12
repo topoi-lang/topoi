@@ -4,13 +4,14 @@ module Syntax.Concrete where
 -- source location in this case
 import Data.Loc
 import Data.Text (Text)
+import qualified Data.Text as Text
 
 data Program = Program [Expr] Loc
 
 data Lit
   = Num Int
-  | Bol Bool
-  | Str Text
+  | -- | Bol Bool
+    Str Text
   deriving (Show)
 
 data VarName = VarName Text Loc deriving (Show)
@@ -25,4 +26,11 @@ data Expr
   = App Expr Expr Loc -- Function application
   | Lit Lit Loc
   | Var VarName Loc
-  deriving (Show)
+
+-- testing purpose
+instance Show Expr where
+  show expr = case expr of
+    App _ _ _ -> "App"
+    Lit (Num i) _ -> "Lit " <> show i
+    Lit (Str s) _ -> "Lit " <> Text.unpack s
+    Var (VarName s _) _ -> "Var " <> Text.unpack s
