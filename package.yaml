@@ -38,6 +38,8 @@ executables:
       Parse.TokenStream
 
       Reporting.Annotation
+
+      Syntax.Concrete
     ghc-options:
       - -Wall
       - -Wextra

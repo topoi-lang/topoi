@@ -2,7 +2,6 @@
 
 module Parse.SExprParser where
 
-import qualified AST.Source as Src
 import Control.Monad (void)
 import Data.Loc
 import Data.Text (Text)
@@ -11,6 +10,7 @@ import qualified Parse.Combinator as PC
 import Parse.Lexer
 import Reporting.Annotation (PosLog)
 import qualified Reporting.Annotation as A
+import Syntax.Concrete
 import qualified Text.Megaparsec as MP
 import Text.Megaparsec hiding (ParseError, Pos, State, parse)
 import Prelude hiding (Ordering (..))
@@ -76,8 +76,11 @@ integer = PC.extract f <?> "interger"
     f (TokInt i) = Just i
     f _ = Nothing
 
-sExpression :: Parser Src.Expr
-sExpression = parens expression
+-- literal :: Parser Lit
+expressionList :: Parser [Expr]
+expressionList =
+  sepBy1 expression (symbol TokWhiteSpace)
+    <?> "list of expressions"
 
-expression :: Parser Src.Expr
-expression = PC.takeLoc $ choice []
+expression :: Parser Expr
+expression = undefined
