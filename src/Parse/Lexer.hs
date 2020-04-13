@@ -61,27 +61,35 @@ check f xs
 atomRE :: RE Text Text
 atomRE =
   Text.append <$> psym (check (== '\''))
-    <*> (Text.concat <$> many (psym (check (\c -> isAlphaNum c || c == '_' || c == '\''))))
+    <*> (Text.concat <$> many (psym (check (\c -> isAlphaNum c || c == '_'))))
 
 identifierRE :: RE Text Text
 identifierRE =
-  Text.append <$> psym (check (/= '\''))
-    <*> (Text.concat <$> many (psym (check (\c -> isAlphaNum c || c == '_' || c == '\''))))
+  Text.concat <$> many (psym (check (\c -> isAlphaNum c || c == '_')))
 
 intRE :: RE Text Int
-intRE = read <$> (Text.unpack . Text.concat <$> (some . psym . check $ isDigit))
+intRE =
+  read
+    <$> (Text.unpack . Text.concat <$> (some . psym . check $ isDigit))
 
 contra :: RE Text a -> RE Char a
 contra = comap Text.singleton
 
-lexer :: Lexer Tok
-lexer = token (longest $ contra tokRE)
+whitespaceButNewlineRE :: RE Text Tok
+whitespaceButNewlineRE =
+  matchWhen
+    (check (\c -> isSpace c && c /= '\n' && c /= '\r'))
+    TokWhiteSpace
+  where
+    matchWhen :: (Text -> Bool) -> Tok -> RE Text Tok
+    matchWhen p symbol = msym (\t -> if p t then Just symbol else Nothing)
 
--- mconcat
--- [ token (longest $ contra tokRE),
--- whitespace (longest $ contra whitespaceButNewlineRE),
--- whitespace (longestShortest (contra commentStartRE) (contra . commentEndRE))
--- ]
+lexer :: Lexer Tok
+lexer =
+  mconcat
+    [ token (longest $ contra tokRE),
+      whitespace (longest $ contra whitespaceButNewlineRE)
+    ]
 
 -- | Scanning
 type LexicalError = Pos
