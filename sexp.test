@@ -1,3 +1,2 @@
-(set 'x)
-(set2 'x)
-(set 'x 23)
+(set a 'b)
+(set a 123)

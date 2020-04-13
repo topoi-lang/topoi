@@ -1,36 +1,35 @@
 module Syntax.Concrete where
 
 -- This serves as the parse tree and contains
--- source location in this case
+-- source location
+
 import Data.Loc
 import Data.Text (Text)
-import qualified Data.Text as Text
 
 data Program = Program [Expr] Loc
 
 data Lit
   = Num Int
-  | -- | Bol Bool
-    Str Text
+  | Str Text -- this is atom
   deriving (Show)
 
-data VarName = VarName Text Loc deriving (Show)
+-- There is no operator in a s expression
+data Ident = Ident Text Loc deriving (Show)
 
 data Type
   = TFunc Type Type Loc
-  | TVar VarName Loc -- "some user defined type"
-  | TList Type Loc -- "'(...)"
+  | TVar Ident Loc -- "some user defined type"
+  | TList Type Loc
+  | TUniverse Int Loc
   deriving (Show)
 
 data Expr
   = App Expr Expr Loc -- Function application
   | Lit Lit Loc
-  | Var VarName Loc
+  | Var Ident Loc
+  deriving (Show)
 
--- testing purpose
-instance Show Expr where
-  show expr = case expr of
-    App _ _ _ -> "App"
-    Lit (Num i) _ -> "Lit " <> show i
-    Lit (Str s) _ -> "Lit " <> Text.unpack s
-    Var (VarName s _) _ -> "Var " <> Text.unpack s
+instance Located Expr where
+  locOf (App _ _ loc) = loc
+  locOf (Lit _ loc) = loc
+  locOf (Var _ loc) = loc
