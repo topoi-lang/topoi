@@ -36,6 +36,7 @@ executables:
 
       Reporting.Annotation
 
+      Syntax.Abstract
       Syntax.Concrete
     ghc-options:
       - -Wall
