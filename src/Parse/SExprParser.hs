@@ -3,6 +3,7 @@
 module Parse.SExprParser where
 
 import Control.Monad (void)
+import Control.Monad.Combinators.Expr
 import Data.Loc
 import Data.Text (Text)
 import Data.Void
@@ -93,30 +94,18 @@ term =
         ]
     )
 
-unaryApplication :: Parser Expr
-unaryApplication = do
-  fn <- term
-  arg <- term
-  pure $ App fn arg (fn <--> arg)
-
-binaryApplication :: Parser Expr
-binaryApplication = do
-  fn <- term
-  arg1 <- term
-  arg2 <- term
-  let loc0 = locOf fn
-  let loc1 = locOf arg1
-  let loc2 = locOf arg2
-  pure $ App (App fn arg1 (loc1 <--> loc0)) arg2 (loc1 <--> loc2)
+application :: Parser (Expr -> Expr)
+application = do
+  terms <- many term
+  return $ \fn -> do
+    let app arg loc = App arg loc (fn <--> loc)
+    foldl app fn terms
 
 expression :: Parser Expr
-expression =
-  parens $
-    choice
-      [ try binaryApplication,
-        unaryApplication,
-        term
-      ]
+expression = parens (makeExprParser term table <?> "expression")
+  where
+    table :: [[Operator Parser Expr]]
+    table = [[Postfix application]]
 
 expressionList :: Parser [Expr]
 expressionList = many expression
