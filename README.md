@@ -7,7 +7,7 @@ We are in the phrase of building the topoi-core, a minimal representation of top
 
 ### Codebase
 
-#### Technologies
+<!-- #### Technologies
 
 Here is the the folder structure of this mono repo is:
 
@@ -18,7 +18,7 @@ topoi/
 ```
 
 And we are using **Haskell** to construct our compiler because it is well suited to this domain (compiler). And the
-language allows use to make syntax tree manipulation easily.
+language allows use to make syntax tree manipulation easily. -->
 
 ### Install and running it
 

@@ -13,28 +13,30 @@ tested-with:        GHC == 8.8.2 # lts-15.3
 
 dependencies:
 - base >= 4.7 && < 5
-- co-log >= 0.4.0
+- bytestring >= 0.10
+- containers
 - lexer-applicative
 - megaparsec >= 8.0.0
-- mtl >= 2.2.2
+- mtl
 - regex-applicative >= 0.3.3
+- srcloc >= 0.5
 - text >= 1.2.4
 - unordered-containers >= 0.2.10
-
-default-extensions:
-- OverloadedStrings
-- GeneralizedNewtypeDeriving
 
 executables:
   topoi:
     source-dirs:
-      compiler/src
-      terminal/src
-    main:          Main.hs
-    other-modules:
-      App.Monad
-      App.Env
-      Parse.Sexpr
+      src
+    main:          Terminal/Main.hs
+    exposed_modules:
+      Parse.Combinator
+      Parse.Lexer
+      Parse.SExprParser
+      Parse.TokenStream
+
+      Reporting.Annotation
+
+      Syntax.Concrete
     ghc-options:
       - -Wall
       - -Wextra
