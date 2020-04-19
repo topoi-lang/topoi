@@ -1,2 +1,1 @@
-(set a 'b)
-(set a 123)
+(Pair a b)

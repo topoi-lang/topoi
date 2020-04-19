@@ -18,6 +18,7 @@ dependencies:
 - lexer-applicative
 - megaparsec >= 8.0.0
 - mtl
+- parser-combinators
 - regex-applicative >= 0.3.3
 - srcloc >= 0.5
 - text >= 1.2.4
@@ -35,7 +36,9 @@ executables:
       Parse.TokenStream
 
       Reporting.Annotation
+      Reporting.Error
 
+      Syntax.Abstract
       Syntax.Concrete
     ghc-options:
       - -Wall
