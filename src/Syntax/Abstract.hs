@@ -19,7 +19,10 @@ data Expr
   | App Expr Expr
   deriving (Show)
 
-data TPrimitive = TInt | TBool | TChar
+data TPrimitive
+  = TInt
+  | TBool
+  | TStr {- should be TChr, but atom is a text so... -}
   deriving (Show)
 
 data Type

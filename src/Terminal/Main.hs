@@ -16,6 +16,7 @@ import System.Environment (getArgs)
 strip :: String -> String
 strip str = Text.unpack . Text.strip $ Text.pack str
 
+-- can use https://github.com/pcapriotti/optparse-applicative
 main :: IO ()
 main = do
   args <- getArgs
