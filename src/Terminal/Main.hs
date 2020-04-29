@@ -12,6 +12,7 @@ import Parse.Lexer
 import Parse.SExprParser
 import qualified Paths_topoi as TOPOI
 import System.Environment (getArgs)
+import Type.Infer
 
 strip :: String -> String
 strip str = Text.unpack . Text.strip $ Text.pack str
@@ -33,6 +34,8 @@ compile pathName = do
   putStrLn "-- Parse Tree --"
   let csTree = parse expressionList pathName (fromRight undefined tokens)
   print csTree
+  putStrLn "-- Type Check --"
+  print . runSubstituteM . inferProgram $ fromRight [] csTree
 
 helpMsg :: String
 helpMsg =

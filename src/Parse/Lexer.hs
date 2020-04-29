@@ -65,7 +65,8 @@ atomRE =
 
 identifierRE :: RE Text Text
 identifierRE =
-  Text.concat <$> many (psym (check (\c -> isAlphaNum c || c == '_')))
+  Text.append <$> psym (check isAlpha)
+    <*> (Text.concat <$> many (psym (check (\c -> isAlphaNum c || c == '_'))))
 
 intRE :: RE Text Int
 intRE =
