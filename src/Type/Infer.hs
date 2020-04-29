@@ -1,30 +1,71 @@
+{-# LANGUAGE OverloadedStrings #-}
+
 module Type.Infer where
 
-import Data.IntMap (IntMap) -- NOTE: gonna substiture things
+import Control.Monad.Except
+import Control.Monad.State
+import Data.HashMap.Strict
 import Data.Loc
 import Syntax.Abstract
-import Type.TypedExpr
-import Type.SymbolTable
+import Syntax.Concrete hiding (Expr (..), Type (..))
 import qualified Syntax.Concrete as Concrete
+import Type.Error
+import Prelude hiding (lookup)
 
 inferLit :: Concrete.Lit -> Type
 inferLit (Concrete.Num _) = TPrimitive TInt
 inferLit (Concrete.Str _) = TPrimitive TStr
 
-data Error = Error {
-  loc :: Loc,
-  message :: String
-}
+type SymbolTable = HashMap TVar Type
 
-inferProgram :: [Concrete.Expr] -> Either (SymbolTable, [TypedExpr]) Error
-inferProgram exprs = inferProgram' emptySymbolTable exprs
+type SubstituteM = ExceptT TypeError (State SymbolTable)
 
-inferProgram' :: SymbolTable -> [Concrete.Expr] -> Either (SymbolTable, [TypedExpr]) Error
-inferProgram' symbolTable exprs = 
-  mapM 
-    (\expr -> inferExpr expr)
-    exprs
+-- Todo: make it emptySymbolTable, make function declaration
+predefinedSymbolTable :: SymbolTable
+predefinedSymbolTable =
+  fromList
+    [ ("succ", TFunc (TPrimitive TInt) (TPrimitive TInt)),
+      ("not", TFunc (TPrimitive TBool) (TPrimitive TBool))
+    ]
 
+runSubstituteM :: SubstituteM a -> Either TypeError a
+runSubstituteM m = evalState (runExceptT m) predefinedSymbolTable
 
-inferExpr :: SymbolTable -> Concrete.Expr -> Either (SymbolTable, TypedExpr) Error
-inferExpr = undefined
+exceptM :: Monad m => Maybe a -> e -> (a -> ExceptT e m b) -> ExceptT e m b
+exceptM (Just x) _ f = f x
+exceptM Nothing e _ = throwError e
+
+-- program :: Concrete.Expr
+-- program =
+--   Concrete.App
+--     -- (Concrete.Lit (Concrete.Num 3) NoLoc)
+--     -- (Concrete.Var (Concrete.Ident "succ" NoLoc) NoLoc)
+--     (Concrete.Var (Concrete.Ident "not" NoLoc) NoLoc)
+--     (Concrete.Lit (Concrete.Num 3) NoLoc)
+--     NoLoc
+
+inferProgram :: [Concrete.Expr] -> SubstituteM [Type]
+inferProgram exprs = mapM inferExpr exprs
+
+inferExpr :: Concrete.Expr -> SubstituteM Type
+inferExpr (Concrete.Var (Ident x loc) _) = do
+  symbolTable <- get
+  exceptM (lookup x symbolTable) (Failed x loc) return
+inferExpr (Concrete.Lit x _) = return (inferLit x)
+inferExpr (Concrete.App expr1 expr2 loc) = do
+  fnType <- inferExpr expr1
+  case fnType of
+    TFunc t1 _ -> do
+      t2' <- inferExpr expr2
+      unify loc t1 t2'
+    _ -> throwError (NotAFunction fnType loc)
+
+unify :: Loc -> Type -> Type -> SubstituteM Type
+unify loc (TPrimitive t1) (TPrimitive t2)
+  | t1 == t2 = return (TPrimitive t1)
+  | otherwise = throwError $ UnifyFailed (TPrimitive t1) (TPrimitive t2) loc
+unify loc (TFunc t1 t2) (TFunc t3 t4) = do
+  parameter1 <- unify loc t1 t3
+  parameter2 <- unify loc t2 t4
+  return (TFunc parameter1 parameter2)
+unify loc t1 t2 = throwError (UnifyFailed t1 t2 loc) -- otherwise

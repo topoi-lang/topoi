@@ -23,10 +23,10 @@ data TPrimitive
   = TInt
   | TBool
   | TStr {- should be TChr, but atom is a text so... -}
-  deriving (Show)
+  deriving (Show, Eq)
 
 data Type
   = TFunc Type Type
   | TPrimitive TPrimitive
-  | TVar TVar
+  -- TVar TVar Type
   deriving (Show)

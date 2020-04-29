@@ -42,6 +42,7 @@ executables:
       Syntax.Concrete
 
       Type.Infer
+      Type.Error
     ghc-options:
       - -Wall
       - -Wextra
