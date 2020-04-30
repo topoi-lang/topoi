@@ -4,6 +4,7 @@ import Data.Text (Text)
 
 type Universe = Int
 
+-- identical to Concrete.Ident
 type Var = Text
 
 type TVar = Text
@@ -17,6 +18,7 @@ data Expr
   = Var Var
   | Lit Lit
   | App Expr Expr
+  | VarDecl Var Expr
   deriving (Show)
 
 data TPrimitive
@@ -28,5 +30,5 @@ data TPrimitive
 data Type
   = TFunc Type Type
   | TPrimitive TPrimitive
-  -- TVar TVar Type
+  | TVoid -- bottom type for statement
   deriving (Show)

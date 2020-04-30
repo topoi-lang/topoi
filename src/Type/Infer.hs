@@ -49,6 +49,14 @@ inferProgram :: [Concrete.Expr] -> SubstituteM [Type]
 inferProgram exprs = mapM inferExpr exprs
 
 inferExpr :: Concrete.Expr -> SubstituteM Type
+inferExpr (Concrete.VarDecl (Ident varName identLoc) expr _) = do
+  symbolTable <- get
+  case lookup varName symbolTable of
+    Just _ -> throwError (ReassignConst varName identLoc)
+    Nothing -> do
+      expr' <- inferExpr expr
+      put (insert varName expr' symbolTable)
+      return TVoid
 inferExpr (Concrete.Var (Ident x loc) _) = do
   symbolTable <- get
   exceptM (lookup x symbolTable) (Failed x loc) return

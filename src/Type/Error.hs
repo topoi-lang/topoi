@@ -8,4 +8,5 @@ data TypeError
   = Failed Text Loc
   | UnifyFailed Type Type Loc
   | NotAFunction Type Loc
+  | ReassignConst Text Loc
   deriving (Show)

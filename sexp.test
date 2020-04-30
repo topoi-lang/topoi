@@ -1,5 +1,3 @@
 
-(const aaa '22)
-(const bbb ('abc))
-
-(succ 1)
+(const one 1)
+(succ one)
