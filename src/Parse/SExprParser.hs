@@ -109,7 +109,7 @@ expression = makeExprParser term table <?> "expression"
 
 statement :: Parser Expr
 statement = PC.takeLoc $ do
-  symbol TokConstAssign <?> "const"
+  symbol TokAssign <?> "define"
   varName <- PC.takeLoc $ Ident <$> identifierName
   VarDecl varName
     <$> choice

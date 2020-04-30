@@ -1,4 +1,5 @@
 
-(const one 1)
-(const one '1)
-(succ one)
+(define one 'one)
+(define two 'two)
+
+(eqStr one two)

@@ -23,7 +23,7 @@ data Tok
   | TokAtom Text
   | TokIdent Text
   | TokInt Int
-  | TokConstAssign
+  | TokAssign
   deriving (Eq, Ord)
 
 instance Show Tok where
@@ -36,7 +36,7 @@ instance Show Tok where
     TokAtom s -> Text.unpack s
     TokIdent s -> Text.unpack s
     TokInt i -> show i
-    TokConstAssign -> "const"
+    TokAssign -> "define"
 
 text :: Text -> RE Text Text
 text rawText = Text.foldr f (pure "") rawText
@@ -50,7 +50,7 @@ tokRE =
   TokNewline <$ text "\n"
     <|> TokParenOpen <$ text "("
     <|> TokParenClose <$ text ")"
-    <|> TokConstAssign <$ text "const"
+    <|> TokAssign <$ text "define"
     <|> TokAtom <$> atomRE
     <|> TokIdent <$> identifierRE
     <|> TokInt <$> intRE
