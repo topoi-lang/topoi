@@ -4,6 +4,7 @@ module Main where
 
 import Data.Either (fromRight)
 import Data.List (intercalate)
+import Data.Loc
 import qualified Data.Text as Text
 import qualified Data.Text.IO as Text
 import Data.Version
@@ -11,6 +12,7 @@ import Language.Lexer.Applicative (streamToList)
 import Parse.Lexer
 import Parse.SExprParser
 import qualified Paths_topoi as TOPOI
+import Syntax.Concrete
 import System.Environment (getArgs)
 import Type.Infer
 
@@ -34,10 +36,9 @@ compile pathName = do
   putStrLn "-- Parse Tree --"
   let csTree = parse program pathName (fromRight undefined tokens)
   print csTree
-
--- putStrLn "-- Type Check --"
-
--- print . runSubstituteM . inferProgram $ fromRight [] csTree
+  putStrLn "-- Type Check --"
+  let (Program exprs _) = fromRight (Program [] NoLoc) csTree
+  print . runSubstituteM . inferProgram $ exprs
 
 helpMsg :: String
 helpMsg =
