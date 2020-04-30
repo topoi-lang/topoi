@@ -32,10 +32,12 @@ compile pathName = do
   let tokens = scan pathName sourceFile
   print . streamToList $ fromRight (error "token issue") tokens
   putStrLn "-- Parse Tree --"
-  let csTree = parse expressionList pathName (fromRight undefined tokens)
+  let csTree = parse program pathName (fromRight undefined tokens)
   print csTree
-  putStrLn "-- Type Check --"
-  print . runSubstituteM . inferProgram $ fromRight [] csTree
+
+-- putStrLn "-- Type Check --"
+
+-- print . runSubstituteM . inferProgram $ fromRight [] csTree
 
 helpMsg :: String
 helpMsg =

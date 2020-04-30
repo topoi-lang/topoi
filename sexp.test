@@ -1,2 +1,5 @@
+
+(const aaa '22)
+(const bbb ('abc))
+
 (succ 1)
-(eqStr '1 '2)
