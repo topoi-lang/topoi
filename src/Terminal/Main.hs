@@ -4,6 +4,7 @@ module Main where
 
 import Data.Either (fromRight)
 import Data.List (intercalate)
+import Data.Loc
 import qualified Data.Text as Text
 import qualified Data.Text.IO as Text
 import Data.Version
@@ -11,11 +12,14 @@ import Language.Lexer.Applicative (streamToList)
 import Parse.Lexer
 import Parse.SExprParser
 import qualified Paths_topoi as TOPOI
+import Syntax.Concrete
 import System.Environment (getArgs)
+import Type.Infer
 
 strip :: String -> String
 strip str = Text.unpack . Text.strip $ Text.pack str
 
+-- can use https://github.com/pcapriotti/optparse-applicative
 main :: IO ()
 main = do
   args <- getArgs
@@ -30,8 +34,11 @@ compile pathName = do
   let tokens = scan pathName sourceFile
   print . streamToList $ fromRight (error "token issue") tokens
   putStrLn "-- Parse Tree --"
-  let csTree = parse expressionList pathName (fromRight undefined tokens)
+  let csTree = parse program pathName (fromRight undefined tokens)
   print csTree
+  putStrLn "-- Type Check --"
+  let (Program exprs _) = fromRight (Program [] NoLoc) csTree
+  print . runSubstituteM . inferProgram $ exprs
 
 helpMsg :: String
 helpMsg =

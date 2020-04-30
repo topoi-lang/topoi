@@ -102,10 +102,31 @@ application = do
     foldl app fn terms
 
 expression :: Parser Expr
-expression = parens (makeExprParser term table <?> "expression")
+expression = makeExprParser term table <?> "expression"
   where
     table :: [[Operator Parser Expr]]
     table = [[Postfix application]]
 
-expressionList :: Parser [Expr]
-expressionList = many expression
+statement :: Parser Expr
+statement = PC.takeLoc $ do
+  symbol TokAssign <?> "define"
+  varName <- PC.takeLoc $ Ident <$> identifierName
+  VarDecl varName
+    <$> choice
+      [ try expression,
+        parens expression
+      ]
+
+program :: Parser Program
+program = PC.takeLoc $ do
+  void $ many (PC.ignore TokNewline)
+  expressions <-
+    many
+      ( choice
+          [ try $ parens statement,
+            parens expression
+          ]
+          <?> "expression"
+      )
+  eof
+  return $ Program expressions

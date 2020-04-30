@@ -40,6 +40,9 @@ executables:
 
       Syntax.Abstract
       Syntax.Concrete
+
+      Type.Infer
+      Type.Error
     ghc-options:
       - -Wall
       - -Wextra

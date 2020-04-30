@@ -23,6 +23,7 @@ data Tok
   | TokAtom Text
   | TokIdent Text
   | TokInt Int
+  | TokAssign
   deriving (Eq, Ord)
 
 instance Show Tok where
@@ -35,6 +36,7 @@ instance Show Tok where
     TokAtom s -> Text.unpack s
     TokIdent s -> Text.unpack s
     TokInt i -> show i
+    TokAssign -> "define"
 
 text :: Text -> RE Text Text
 text rawText = Text.foldr f (pure "") rawText
@@ -48,6 +50,7 @@ tokRE =
   TokNewline <$ text "\n"
     <|> TokParenOpen <$ text "("
     <|> TokParenClose <$ text ")"
+    <|> TokAssign <$ text "define"
     <|> TokAtom <$> atomRE
     <|> TokIdent <$> identifierRE
     <|> TokInt <$> intRE
@@ -65,7 +68,8 @@ atomRE =
 
 identifierRE :: RE Text Text
 identifierRE =
-  Text.concat <$> many (psym (check (\c -> isAlphaNum c || c == '_')))
+  Text.append <$> psym (check isAlpha)
+    <*> (Text.concat <$> many (psym (check (\c -> isAlphaNum c || c == '_'))))
 
 intRE :: RE Text Int
 intRE =
