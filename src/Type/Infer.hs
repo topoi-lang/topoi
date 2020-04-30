@@ -25,7 +25,8 @@ predefinedSymbolTable :: SymbolTable
 predefinedSymbolTable =
   fromList
     [ ("succ", TFunc (TPrimitive TInt) (TPrimitive TInt)),
-      ("not", TFunc (TPrimitive TBool) (TPrimitive TBool))
+      ("not", TFunc (TPrimitive TBool) (TPrimitive TBool)),
+      ("eqStr", TFunc (TPrimitive TStr) (TFunc (TPrimitive TStr) (TPrimitive TBool)))
     ]
 
 runSubstituteM :: SubstituteM a -> Either TypeError a
@@ -55,9 +56,10 @@ inferExpr (Concrete.Lit x _) = return (inferLit x)
 inferExpr (Concrete.App expr1 expr2 loc) = do
   fnType <- inferExpr expr1
   case fnType of
-    TFunc t1 _ -> do
-      t2' <- inferExpr expr2
-      unify loc t1 t2'
+    TFunc parameter returnType -> do
+      t2 <- inferExpr expr2
+      void $ unify loc parameter t2
+      return returnType
     _ -> throwError (NotAFunction fnType loc)
 
 unify :: Loc -> Type -> Type -> SubstituteM Type
