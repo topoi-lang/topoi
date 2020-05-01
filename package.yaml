@@ -34,6 +34,7 @@ executables:
       Parse.Lexer
       Parse.SExprParser
       Parse.TokenStream
+      Parse.TopoiParser
 
       Reporting.Annotation
       Reporting.Error
