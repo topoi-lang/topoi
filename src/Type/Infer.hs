@@ -36,15 +36,6 @@ exceptM :: Monad m => Maybe a -> e -> (a -> ExceptT e m b) -> ExceptT e m b
 exceptM (Just x) _ f = f x
 exceptM Nothing e _ = throwError e
 
--- program :: Concrete.Expr
--- program =
---   Concrete.App
---     -- (Concrete.Lit (Concrete.Num 3) NoLoc)
---     -- (Concrete.Var (Concrete.Ident "succ" NoLoc) NoLoc)
---     (Concrete.Var (Concrete.Ident "not" NoLoc) NoLoc)
---     (Concrete.Lit (Concrete.Num 3) NoLoc)
---     NoLoc
-
 inferProgram :: [Concrete.Expr] -> SubstituteM [Type]
 inferProgram exprs = mapM inferExpr exprs
 
@@ -60,6 +51,9 @@ inferExpr (Concrete.VarDecl (Ident varName identLoc) expr _) = do
 inferExpr (Concrete.Var (Ident x loc) _) = do
   symbolTable <- get
   exceptM (lookup x symbolTable) (Failed x loc) return
+inferExpr (Concrete.LambdaDecl (Argument _ _) expr _) = do
+  returnType <- inferExpr expr
+  return (TFunc (TPrimitive THole) returnType)
 inferExpr (Concrete.Lit x _) = return (inferLit x)
 inferExpr (Concrete.App expr1 expr2 loc) = do
   fnType <- inferExpr expr1

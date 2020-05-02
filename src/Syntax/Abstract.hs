@@ -25,6 +25,7 @@ data TPrimitive
   = TInt
   | TBool
   | TStr {- should be TChr, but atom is a text so... -}
+  | THole
   deriving (Show, Eq)
 
 data Type

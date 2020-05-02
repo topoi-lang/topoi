@@ -24,6 +24,7 @@ data Tok
   | TokIdent Text
   | TokInt Int
   | TokAssign
+  | TokLambdaDecl
   deriving (Eq, Ord)
 
 instance Show Tok where
@@ -37,6 +38,7 @@ instance Show Tok where
     TokIdent s -> Text.unpack s
     TokInt i -> show i
     TokAssign -> "define"
+    TokLambdaDecl -> "lambda"
 
 text :: Text -> RE Text Text
 text rawText = Text.foldr f (pure "") rawText
@@ -51,6 +53,7 @@ tokRE =
     <|> TokParenOpen <$ text "("
     <|> TokParenClose <$ text ")"
     <|> TokAssign <$ text "define"
+    <|> TokLambdaDecl <$ text "lambda"
     <|> TokAtom <$> atomRE
     <|> TokIdent <$> identifierRE
     <|> TokInt <$> intRE

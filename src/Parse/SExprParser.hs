@@ -107,8 +107,8 @@ expression = makeExprParser term table <?> "expression"
     table :: [[Operator Parser Expr]]
     table = [[Postfix application]]
 
-statement :: Parser Expr
-statement = PC.takeLoc $ do
+varBinding :: Parser Expr
+varBinding = PC.takeLoc $ do
   symbol TokAssign <?> "define"
   varName <- PC.takeLoc $ Ident <$> identifierName
   VarDecl varName
@@ -116,6 +116,19 @@ statement = PC.takeLoc $ do
       [ try expression,
         parens expression
       ]
+
+lambdaBinding :: Parser Expr
+lambdaBinding = PC.takeLoc $ do
+  symbol TokLambdaDecl <?> "lambda"
+  arg <- PC.takeLoc $ Argument <$> identifierName
+  LambdaDecl arg <$> (parens expression)
+
+statement :: Parser Expr
+statement =
+  choice
+    [ varBinding,
+      lambdaBinding
+    ]
 
 program :: Parser Program
 program = PC.takeLoc $ do

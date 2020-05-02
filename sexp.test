@@ -3,3 +3,5 @@
 (define two 'two)
 
 (eqStr one two)
+
+(lambda x (succ x))
