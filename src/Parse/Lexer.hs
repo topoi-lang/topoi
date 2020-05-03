@@ -20,10 +20,12 @@ data Tok
   | TokEOF
   | TokParenOpen
   | TokParenClose
-  | TokAtom Text
-  | TokIdent Text
+  | TokUpperIdent Text
+  | TokLowerIdent Text
   | TokInt Int
   | TokAssign
+  | TokSemicolon
+  | TokLeftArrow
   deriving (Eq, Ord)
 
 instance Show Tok where
@@ -33,10 +35,12 @@ instance Show Tok where
     TokEOF -> ""
     TokParenOpen -> "("
     TokParenClose -> ")"
-    TokAtom s -> Text.unpack s
-    TokIdent s -> Text.unpack s
+    TokUpperIdent s -> show s
+    TokLowerIdent s -> show s
     TokInt i -> show i
     TokAssign -> "define"
+    TokSemicolon -> ":"
+    TokLeftArrow -> "->"
 
 text :: Text -> RE Text Text
 text rawText = Text.foldr f (pure "") rawText
@@ -51,9 +55,11 @@ tokRE =
     <|> TokParenOpen <$ text "("
     <|> TokParenClose <$ text ")"
     <|> TokAssign <$ text "define"
-    <|> TokAtom <$> atomRE
-    <|> TokIdent <$> identifierRE
+    <|> TokLowerIdent <$> lowercaseIdentifierRE
+    <|> TokUpperIdent <$> uppercaseIdentifierRE
     <|> TokInt <$> intRE
+    <|> TokSemicolon <$ text ":"
+    <|> TokLeftArrow <$ text "->"
 
 check :: (Char -> Bool) -> Text -> Bool
 check f xs
@@ -69,6 +75,16 @@ atomRE =
 identifierRE :: RE Text Text
 identifierRE =
   Text.append <$> psym (check isAlpha)
+    <*> (Text.concat <$> many (psym (check (\c -> isAlphaNum c || c == '_'))))
+
+uppercaseIdentifierRE :: RE Text Text
+uppercaseIdentifierRE =
+  Text.append <$> psym (check isUpper) -- TODO: Unicode
+    <*> (Text.concat <$> many (psym (check (\c -> isAlphaNum c || c == '_'))))
+
+lowercaseIdentifierRE :: RE Text Text
+lowercaseIdentifierRE =
+  Text.append <$> psym (check isLower) -- TODO: Unicode
     <*> (Text.concat <$> many (psym (check (\c -> isAlphaNum c || c == '_'))))
 
 intRE :: RE Text Int

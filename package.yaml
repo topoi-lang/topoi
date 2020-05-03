@@ -32,7 +32,6 @@ executables:
     exposed_modules:
       Parse.Combinator
       Parse.Lexer
-      Parse.SExprParser
       Parse.TokenStream
       Parse.TopoiParser
 
@@ -42,7 +41,6 @@ executables:
       Syntax.Abstract
       Syntax.Concrete
 
-      Type.Infer
       Type.Error
     ghc-options:
       - -Wall

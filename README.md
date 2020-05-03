@@ -41,6 +41,8 @@ if you are using cabal to compile Haskell program.
 
 We are using [ormolu](https://github.com/tweag/ormolu) to do code formatting. And we too provided the editorconfig.
 
+Please stick to the latest ormolu.
+
 ## Issue and Contribution
 
 Please use Github issues for bug reports and requests. To contribute directly, open a pull request on [Github repo](https://github.com/topoi-lang/topoi/issues). Files must be contributed under the MIT license.

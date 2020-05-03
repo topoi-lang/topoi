@@ -18,8 +18,8 @@ getLoc parser = do
   loc <- lift (markEnd posID)
   pure (result, loc)
 
-takeLoc :: (Ord tok, PrettyToken tok) => P tok (Loc -> a) -> P tok a
-takeLoc parser = do
+withLoc :: (Ord tok, PrettyToken tok) => P tok (Loc -> a) -> P tok a
+withLoc parser = do
   (result, loc) <- getLoc parser
   pure (result loc)
 
