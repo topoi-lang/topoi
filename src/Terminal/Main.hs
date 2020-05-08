@@ -33,10 +33,12 @@ compile pathName = do
   sourceFile <- Text.readFile pathName
   putStrLn "-- Tokens --"
   let tokens = scan pathName sourceFile
-  print . streamToList $ fromRight (error "token issue") tokens
-  putStrLn "-- Parse Tree --"
-  let csTree = parse typeSignature pathName (fromRight undefined tokens)
-  print csTree
+  -- print . streamToList $ fromRight (error "token issue") tokens
+  print tokens
+
+-- putStrLn "-- Parse Tree --"
+-- let csTree = parse typeSignature pathName (fromRight undefined tokens)
+-- print csTree
 
 -- putStrLn "-- Type Check --"
 -- let (Program exprs _) = fromRight (Program [] NoLoc) csTree

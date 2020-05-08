@@ -26,6 +26,7 @@ data Tok
   | TokAssign
   | TokSemicolon
   | TokLeftArrow
+  | TokDocLineComment Text
   deriving (Eq, Ord)
 
 instance Show Tok where
@@ -41,6 +42,7 @@ instance Show Tok where
     TokAssign -> "define"
     TokSemicolon -> ":"
     TokLeftArrow -> "->"
+    TokDocLineComment s -> "--|" <> show s
 
 text :: Text -> RE Text Text
 text rawText = Text.foldr f (pure "") rawText
@@ -79,12 +81,12 @@ identifierRE =
 
 uppercaseIdentifierRE :: RE Text Text
 uppercaseIdentifierRE =
-  Text.append <$> psym (check isUpper) -- TODO: Unicode
+  Text.append <$> psym (check isUpper) -- it actually check the Unicode!
     <*> (Text.concat <$> many (psym (check (\c -> isAlphaNum c || c == '_'))))
 
 lowercaseIdentifierRE :: RE Text Text
 lowercaseIdentifierRE =
-  Text.append <$> psym (check isLower) -- TODO: Unicode
+  Text.append <$> psym (check isLower) -- it actually check the Unicode!
     <*> (Text.concat <$> many (psym (check (\c -> isAlphaNum c || c == '_'))))
 
 intRE :: RE Text Int
@@ -104,11 +106,20 @@ whitespaceButNewlineRE =
     matchWhen :: (Text -> Bool) -> Tok -> RE Text Tok
     matchWhen p symbol = msym (\t -> if p t then Just symbol else Nothing)
 
+docLineCommentRE :: Text -> RE Text Tok
+docLineCommentRE _prefix =
+  TokDocLineComment <$> (Text.concat <$> many anySym) +++ (text "\n")
+  where
+    (+++) = liftA2 (<>)
+
 lexer :: Lexer Tok
 lexer =
   mconcat
     [ token (longest $ contra tokRE),
-      whitespace (longest $ contra whitespaceButNewlineRE)
+      whitespace (longest $ contra whitespaceButNewlineRE),
+      whitespace (longestShortest (contra $ text "--") (contra . (\_ -> many anySym *> text "\n"))),
+      whitespace (longestShortest (contra $ text "--[") (contra . (\_ -> many anySym *> text "]--"))),
+      token (longestShortest (contra $ text "--|") (contra . docLineCommentRE))
     ]
 
 -- | Scanning

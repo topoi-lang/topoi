@@ -18,10 +18,13 @@ import Text.Megaparsec hiding (ParseError, Pos, State, parse)
 {- Note: Topoi Parser
 ~~~~~~~~~~~~~~~~~~~~~~
 
-this will parse the source unit and output the structured data defined in
+This will parse the source unit and output the structured data defined in
 `src/Syntax/Concrete.hs`
 
+If you want to modify the comment parser, please check `src/Parse/Lexer.hs`
+
 -}
+
 type Parser = ParsecT Void TokStream (PosLog Tok)
 
 type SyntacticError = (Loc, String)
@@ -63,6 +66,12 @@ parens =
     (symbol TokParenOpen <?> "left parenthesis")
     (symbol TokParenClose <?> "right parenthesis")
 
+-- | This means uppercase identifier name
+data Upper = Upper Text Loc deriving (Show)
+
+-- | This means lowercase identifier name
+data Lower = Lower Text Loc deriving (Show)
+
 lowercaseIdentifierName :: Parser Text
 lowercaseIdentifierName = P.extract f
   where
@@ -74,29 +83,28 @@ uppercaseIdentifierName = P.extract f
   where
     f (TokUpperIdent s) = Just s
     f _ = Nothing
+-- typeSignature :: Parser Statement
+-- typeSignature = P.withLoc $ do
+--   name <- P.withLoc $ Lower <$> lowercaseIdentifierName
+--   symbol TokSemicolon <?> ":"
+--   TypeDecl name <$> typeParse
 
-typeSignature :: Parser Statement
-typeSignature = P.withLoc $ do
-  name <- P.withLoc $ Lower <$> lowercaseIdentifierName
-  symbol TokSemicolon <?> ":"
-  TypeDecl name <$> typeParse
+-- typeParse :: Parser Type
+-- typeParse = makeExprParser term table <?> "type"
+--   where
+--     table :: [[Operator Parser Type]]
+--     table = [[InfixR functionTypeParse]]
+--     term = parens typeParse <|> baseTypeParse
 
-typeParse :: Parser Type
-typeParse = makeExprParser term table <?> "type"
-  where
-    table :: [[Operator Parser Type]]
-    table = [[InfixR functionTypeParse]]
-    term = parens typeParse <|> baseTypeParse
+-- functionTypeParse :: Parser (Type -> Type -> Type)
+-- functionTypeParse = do
+--   symbol TokLeftArrow <?> "->"
+--   return (\x y -> TFunc x y (x <--> y))
 
-functionTypeParse :: Parser (Type -> Type -> Type)
-functionTypeParse = do
-  symbol TokLeftArrow <?> "->"
-  return (\x y -> TFunc x y (x <--> y))
-
-baseTypeParse :: Parser Type
-baseTypeParse = P.withLoc (TBase <$> P.extract isBaseType) <?> "base type"
-  where
-    isBaseType (TokUpperIdent "Int") = Just TInt
-    isBaseType (TokUpperIdent "Bool") = Just TBool
-    isBaseType (TokUpperIdent "Char") = Just TChar
-    isBaseType _ = Nothing
+-- baseTypeParse :: Parser Type
+-- baseTypeParse = P.withLoc (TBase <$> P.extract isBaseType) <?> "base type"
+--   where
+--     isBaseType (TokUpperIdent "Int") = Just TInt
+--     isBaseType (TokUpperIdent "Bool") = Just TBool
+--     isBaseType (TokUpperIdent "Char") = Just TChar
+--     isBaseType _ = Nothing
