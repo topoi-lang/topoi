@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: f73e6831a255509e2aa2b9da902ea11357a9fb9b28860eceb7e2a5ab64fbe0b0
+-- hash: 2b8e1bbc002deee91cf30cf78e6a249e003837737d97a79e0cdf7476fb8b3b37
 
 name:           topoi
 version:        0.1.0.0
@@ -23,19 +23,22 @@ extra-source-files:
 executable topoi
   main-is: Terminal/Main.hs
   other-modules:
-      Parse.Combinator
+      Eval
+      FormalityCore
       Parse.Lexer
       Parse.TokenStream
-      Parse.TopoiParser
+      Parse.Topoi
+      Parse.Utils
       Reporting.Annotation
       Reporting.Error
       Syntax.Abstract
       Syntax.Concrete
       Type.Error
+      Typecheck
       Paths_topoi
   hs-source-dirs:
       src
-  ghc-options: -Wall -Wextra -threaded -rtsopts -with-rtsopts=-N
+  ghc-options: -Wall -Wextra -threaded -rtsopts -with-rtsopts=-N -funbox-strict-fields
   build-depends:
       base >=4.7 && <5
     , bytestring >=0.10

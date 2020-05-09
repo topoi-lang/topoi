@@ -27,6 +27,7 @@ data Tok
   | TokSemicolon
   | TokLeftArrow
   | TokDocLineComment Text
+  | TokEq
   deriving (Eq, Ord)
 
 instance Show Tok where
@@ -43,6 +44,7 @@ instance Show Tok where
     TokSemicolon -> ":"
     TokLeftArrow -> "->"
     TokDocLineComment s -> "--|" <> show s
+    TokEq -> "="
 
 text :: Text -> RE Text Text
 text rawText = Text.foldr f (pure "") rawText
@@ -62,6 +64,7 @@ tokRE =
     <|> TokInt <$> intRE
     <|> TokSemicolon <$ text ":"
     <|> TokLeftArrow <$ text "->"
+    <|> TokEq <$ text "="
 
 check :: (Char -> Bool) -> Text -> Bool
 check f xs

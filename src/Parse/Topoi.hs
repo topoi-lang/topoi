@@ -1,14 +1,15 @@
 {-# LANGUAGE OverloadedStrings #-}
 
-module Parse.TopoiParser where
+module Parse.Topoi where
 
 import Control.Monad (void)
 import Control.Monad.Combinators.Expr
 import Data.Loc
 import Data.Text (Text)
 import Data.Void
-import qualified Parse.Combinator as P
 import Parse.Lexer
+import Parse.Utils (extract, withLoc)
+import qualified Parse.Utils as U
 import Reporting.Annotation (PosLog)
 import qualified Reporting.Annotation as A
 import Syntax.Concrete
@@ -57,8 +58,8 @@ getLoc _ = mempty
 
 symbol :: Tok -> Parser ()
 symbol t = do
-  P.symbol t
-  void $ many (P.ignore TokNewline)
+  U.symbol t
+  void $ many (U.ignore TokNewline)
 
 parens :: Parser a -> Parser a
 parens =
@@ -66,26 +67,24 @@ parens =
     (symbol TokParenOpen <?> "left parenthesis")
     (symbol TokParenClose <?> "right parenthesis")
 
--- | This means uppercase identifier name
-data Upper = Upper Text Loc deriving (Show)
-
--- | This means lowercase identifier name
-data Lower = Lower Text Loc deriving (Show)
-
-lowercaseIdentifierName :: Parser Text
-lowercaseIdentifierName = P.extract f
+lowerIdent :: Parser Text
+lowerIdent = extract f
   where
     f (TokLowerIdent s) = Just s
     f _ = Nothing
 
-uppercaseIdentifierName :: Parser Text
-uppercaseIdentifierName = P.extract f
+upperIdent :: Parser Text
+upperIdent = extract f
   where
     f (TokUpperIdent s) = Just s
     f _ = Nothing
--- typeSignature :: Parser Statement
+-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+-- TypeSignature
+-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+-- typeSignature :: Parser Term
 -- typeSignature = P.withLoc $ do
---   name <- P.withLoc $ Lower <$> lowercaseIdentifierName
+--   name <- P.withLoc $ Name <$> lowerIdent
 --   symbol TokSemicolon <?> ":"
 --   TypeDecl name <$> typeParse
 
@@ -102,7 +101,7 @@ uppercaseIdentifierName = P.extract f
 --   return (\x y -> TFunc x y (x <--> y))
 
 -- baseTypeParse :: Parser Type
--- baseTypeParse = P.withLoc (TBase <$> P.extract isBaseType) <?> "base type"
+-- baseTypeParse = withLoc (TBase <$> extract isBaseType) <?> "base type"
 --   where
 --     isBaseType (TokUpperIdent "Int") = Just TInt
 --     isBaseType (TokUpperIdent "Bool") = Just TBool

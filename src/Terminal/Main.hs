@@ -10,7 +10,7 @@ import qualified Data.Text.IO as Text
 import Data.Version
 import Language.Lexer.Applicative (streamToList)
 import Parse.Lexer
-import Parse.TopoiParser
+import Parse.Topoi
 import qualified Paths_topoi as TOPOI
 import Syntax.Concrete
 import System.Environment (getArgs)

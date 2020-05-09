@@ -1,4 +1,4 @@
-module Parse.Combinator where
+module Parse.Utils where
 
 import Control.Monad.State
 import Data.Loc
