@@ -1,0 +1,7 @@
+[package]
+name = "topoi-ast"
+version = "0.0.1"
+description = "Topoi AST and utils for walking AST"
+
+[dependencies]
+bumpalo = { version = "3.3", features = ["collections"] }

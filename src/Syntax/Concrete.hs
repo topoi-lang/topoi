@@ -1,48 +1,59 @@
-{-# LANGUAGE OverloadedStrings #-}
-
 module Syntax.Concrete where
 
--- This serves as the parse tree and contains
--- source location
+{- Note
+~~~~~~~~~~~~
+
+This serves as the parse tree and all the terms are
+containing the source location for error reporting.
+-}
 
 import Data.Loc
 import Data.Text (Text)
 
-data Program = Program [Expr] Loc
+data Program
+  = Program
+      [Declaration]
+      [Stmt] -- main program
+      [Expr] -- variable on the root level, treat as global variable, I think
+      Env
+      Loc
+
+data Name = Name Text Loc
   deriving (Show)
 
-data Lit
-  = Num Int
-  | Str Text -- this is atom
-  deriving (Show)
+type Env = [(Text, Expr)]
 
--- There is no operator in a s expression
-data Ident = Ident Text Loc
+data Declaration
+  = VarDecl Name (Maybe Type) Expr Loc
+  | TypeDecl Name Type Loc -- type annotation
+  | LetDecl Name [Text] Expr Loc -- let <name> <args...> = <expr>
+      -- I am trying to make something like let x : A = t in u,
+      -- but just make things easier to be done, I choose to do in this way
 
-data Type
-  = TFunc Type Type Loc
-  | TVar Ident Loc -- "some user defined type"
-  | TList Type Loc
-  | TUniverse Int Loc
+data Stmt
+  = Assign Name [Expr] Loc
+  | Assert Expr Loc
   deriving (Show)
 
 data Expr
-  = App Expr Expr Loc -- Function application
-  | Lit Lit Loc
-  | Var Ident Loc
-  | VarDecl Ident Expr Loc -- Statement
+  = Lit Lit Loc -- base typed variable
+  | Var Name Loc -- x
+  | Lam Name Expr Loc -- \x. t
+  deriving (Show)
 
-instance Located Expr where
-  locOf (App _ _ loc) = loc
-  locOf (Lit _ loc) = loc
-  locOf (Var _ loc) = loc
-  locOf (VarDecl _ _ loc) = loc
+data Type
+  = TBase TBase
+  | TFunc Type Type
+  | TVar Text
+  deriving (Eq, Show)
 
-instance Show Expr where
-  show (App exp1 exp2 _) = "(App " <> show exp1 <> show exp2 <> ")"
-  show (Lit expr _) = "(Lit " <> show expr <> ")"
-  show (Var expr _) = "(Var " <> show expr <> ")"
-  show (VarDecl ident expr _) = "(VarDecl " <> show ident <> " = " <> show expr <> ")"
+data Lit = Num Int | Bol Bool | Chr Char
+  deriving (Show, Eq)
 
-instance Show Ident where
-  show (Ident text _) = show text
+data TBase = TInt | TBool | TChar
+  deriving (Show, Eq)
+
+tInt, tBool, tChar :: Type
+tInt = TBase TInt
+tBool = TBase TBool
+tChar = TBase TChar

@@ -1,22 +1,30 @@
 {-# LANGUAGE OverloadedStrings #-}
 
-module Parse.SExprParser where
+module Parse.Topoi where
 
 import Control.Monad (void)
 import Control.Monad.Combinators.Expr
 import Data.Loc
 import Data.Text (Text)
 import Data.Void
-import qualified Parse.Combinator as PC
 import Parse.Lexer
+import Parse.Utils (extract, withLoc)
+import qualified Parse.Utils as U
 import Reporting.Annotation (PosLog)
 import qualified Reporting.Annotation as A
 import Syntax.Concrete
 import qualified Text.Megaparsec as MP
 import Text.Megaparsec hiding (ParseError, Pos, State, parse)
-import Prelude hiding (Ordering (..))
 
--- This is the parser of the S-Expression
+{- Note: Topoi Parser
+~~~~~~~~~~~~~~~~~~~~~~
+
+This will parse the source unit and output the structured data defined in
+`src/Syntax/Concrete.hs`
+
+If you want to modify the comment parser, please check `src/Parse/Lexer.hs`
+
+-}
 
 type Parser = ParsecT Void TokStream (PosLog Tok)
 
@@ -50,8 +58,8 @@ getLoc _ = mempty
 
 symbol :: Tok -> Parser ()
 symbol t = do
-  PC.symbol t
-  void $ many (PC.ignore TokNewline)
+  U.symbol t
+  void $ many (U.ignore TokNewline)
 
 parens :: Parser a -> Parser a
 parens =
@@ -59,74 +67,43 @@ parens =
     (symbol TokParenOpen <?> "left parenthesis")
     (symbol TokParenClose <?> "right parenthesis")
 
-identifierName :: Parser Text
-identifierName = PC.extract f
+lowerIdent :: Parser Text
+lowerIdent = extract f
   where
-    f (TokIdent s) = Just s
+    f (TokLowerIdent s) = Just s
     f _ = Nothing
 
-atomName :: Parser Text
-atomName = PC.extract f
+upperIdent :: Parser Text
+upperIdent = extract f
   where
-    f (TokAtom s) = Just s
+    f (TokUpperIdent s) = Just s
     f _ = Nothing
+-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+-- TypeSignature
+-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-integer :: Parser Int
-integer = PC.extract f <?> "interger"
-  where
-    f (TokInt i) = Just i
-    f _ = Nothing
+-- typeSignature :: Parser Term
+-- typeSignature = P.withLoc $ do
+--   name <- P.withLoc $ Name <$> lowerIdent
+--   symbol TokSemicolon <?> ":"
+--   TypeDecl name <$> typeParse
 
-literal :: Parser Lit
-literal =
-  choice
-    [ Num <$> integer,
-      Str <$> atomName
-    ]
-    <?> "literal"
+-- typeParse :: Parser Type
+-- typeParse = makeExprParser term table <?> "type"
+--   where
+--     table :: [[Operator Parser Type]]
+--     table = [[InfixR functionTypeParse]]
+--     term = parens typeParse <|> baseTypeParse
 
-term :: Parser Expr
-term =
-  PC.takeLoc
-    ( choice
-        [ Lit <$> literal,
-          Var <$> PC.takeLoc (Ident <$> identifierName)
-        ]
-    )
+-- functionTypeParse :: Parser (Type -> Type -> Type)
+-- functionTypeParse = do
+--   symbol TokLeftArrow <?> "->"
+--   return (\x y -> TFunc x y (x <--> y))
 
-application :: Parser (Expr -> Expr)
-application = do
-  terms <- many term
-  return $ \fn -> do
-    let app arg loc = App arg loc (fn <--> loc)
-    foldl app fn terms
-
-expression :: Parser Expr
-expression = makeExprParser term table <?> "expression"
-  where
-    table :: [[Operator Parser Expr]]
-    table = [[Postfix application]]
-
-statement :: Parser Expr
-statement = PC.takeLoc $ do
-  symbol TokAssign <?> "define"
-  varName <- PC.takeLoc $ Ident <$> identifierName
-  VarDecl varName
-    <$> choice
-      [ try expression,
-        parens expression
-      ]
-
-program :: Parser Program
-program = PC.takeLoc $ do
-  void $ many (PC.ignore TokNewline)
-  expressions <-
-    many
-      ( choice
-          [ try $ parens statement,
-            parens expression
-          ]
-          <?> "expression"
-      )
-  eof
-  return $ Program expressions
+-- baseTypeParse :: Parser Type
+-- baseTypeParse = withLoc (TBase <$> extract isBaseType) <?> "base type"
+--   where
+--     isBaseType (TokUpperIdent "Int") = Just TInt
+--     isBaseType (TokUpperIdent "Bool") = Just TBool
+--     isBaseType (TokUpperIdent "Char") = Just TChar
+--     isBaseType _ = Nothing

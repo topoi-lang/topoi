@@ -30,10 +30,10 @@ executables:
       src
     main:          Terminal/Main.hs
     exposed_modules:
-      Parse.Combinator
       Parse.Lexer
-      Parse.SExprParser
       Parse.TokenStream
+      Parse.Topoi
+      Parse.Utils
 
       Reporting.Annotation
       Reporting.Error
@@ -41,7 +41,6 @@ executables:
       Syntax.Abstract
       Syntax.Concrete
 
-      Type.Infer
       Type.Error
     ghc-options:
       - -Wall
@@ -49,3 +48,4 @@ executables:
       - -threaded
       - -rtsopts
       - -with-rtsopts=-N
+      - -funbox-strict-fields
