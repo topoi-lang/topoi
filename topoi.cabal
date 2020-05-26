@@ -1,11 +1,4 @@
-cabal-version: 1.12
-
--- This file has been generated from package.yaml by hpack version 0.31.2.
---
--- see: https://github.com/sol/hpack
---
--- hash: 3b18f57a627d53ab50438ddec71016e9b135965301af9484d5a380a2db3ea707
-
+cabal-version:  3.0
 name:           topoi
 version:        0.1.0.0
 category:       Compiler, Language
@@ -15,7 +8,6 @@ maintainer:     zypeh.geek@gmail.com
 copyright:      Copyright (c) 2020, Topoi-lang
 license:        MIT
 license-file:   LICENSE
-tested-with:    GHC == 8.8.2
 build-type:     Simple
 extra-source-files:
     README.md

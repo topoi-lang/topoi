@@ -1,5 +1,0 @@
-
-(define one 'one)
-(define two 'two)
-
-(eqStr one two)
