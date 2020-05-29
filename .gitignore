@@ -3,3 +3,4 @@ dist-newstyle
 stack.yaml.lock
 
 target
+result

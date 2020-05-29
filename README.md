@@ -3,6 +3,7 @@ Topoi aims to become a good compiler.
 
 ### Status
 We are building the compiler using Haskell programming language which is a high-level language that has huge ecosystem on compiler engineering field.
+
 We breakdown the development into several phrases.
 
 #### Phrase 1
