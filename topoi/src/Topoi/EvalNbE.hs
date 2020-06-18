@@ -1,3 +1,5 @@
+{-# LANGUAGE LambdaCase, BlockArguments #-}
+
 module Topoi.EvalNbE where
 
 import qualified Data.HashMap.Strict as Map
