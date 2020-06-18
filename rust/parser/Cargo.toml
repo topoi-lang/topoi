@@ -1,9 +1,0 @@
-[package]
-name = "topoi-parser"
-version = "0.0.1"
-
-[dependencies]
-topoi-lexer = { path = "../lexer" }
-topoi-ast = { path = "../ast" }
-bumpalo = "3.3" # A fast bump allocation arena for Rust
-logos = "0.11"
