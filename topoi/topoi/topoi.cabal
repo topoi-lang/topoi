@@ -1,0 +1,33 @@
+cabal-version: 1.12
+
+-- This file has been generated from package.yaml by hpack version 0.31.2.
+--
+-- see: https://github.com/sol/hpack
+--
+-- hash: b0c3fa8ec337b1fcb4fc8a29f03183ad89b66c00c638793d05987c6f1b6faf49
+
+name:           topoi
+version:        0.1.0.0
+category:       Language
+homepage:       https://github.com/topoi-lang/topoi#readme
+bug-reports:    https://github.com/topoi-lang/topoi/issues
+maintainer:     Zheng Yan PEH <zypeh.geek@gmail.com>
+license:        MIT
+license-file:   LICENSE
+build-type:     Simple
+
+source-repository head
+  type: git
+  location: https://github.com/topoi-lang/topoi
+
+executable topoi
+  main-is: Main.hs
+  other-modules:
+      Paths_topoi
+  hs-source-dirs:
+      src
+  ghc-options: -Wall -Wcompat -Wincomplete-record-updates -Wincomplete-uni-patterns -Wredundant-constraints -threaded -rtsopts -with-rtsopts=-N
+  build-depends:
+      base
+    , topoi-compiler
+  default-language: Haskell2010

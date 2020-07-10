@@ -1,0 +1,16 @@
+resolver: lts-16.4
+packages:
+- topoi
+- topoi-compiler
+
+extra-deps:
+- constraints-0.11.2
+- constraints-extras-0.3.0.2
+- git: https://github.com/WebGHC/dependent-sum.git
+  commit: 5158a7dc5e714ca82e94c76ceec838ad85b0efab
+  subdirs:
+  - dependent-sum
+  - dependent-sum-template
+- dependent-hashmap-0.1.0.1
+- some-1.0.0.3
+- rock-0.3.0.0

@@ -5,12 +5,14 @@ import qualified Paths_topoi as TOPOI
 import Data.Version
 import Data.List (intercalate)
 
+import Topoi.Compiler (print'')
+
 main :: IO ()
 main = do
-    args <- getArgs
-    case args of
-        [cmd, path] | cmd == "-c" -> putStrLn path
-        _ -> putStrLn helpMsg
+  args <- getArgs
+  case args of
+    [cmd, path] | cmd == "-c" -> mconcat [putStr path, print'']
+    otherwise -> putStrLn helpMsg
 
 helpMsg :: String
 helpMsg =

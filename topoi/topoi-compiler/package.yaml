@@ -1,4 +1,4 @@
-name: topoi
+name: topoi-compiler
 version: 0.1.0.0
 # synopsis
 # description
@@ -6,9 +6,6 @@ maintainer: Zheng Yan PEH <zypeh.geek@gmail.com>
 github: topoi-lang/topoi
 category: Language
 license-file: LICENSE
-extra-source-files:
-  - README.md
-  - docs/*
 
 ghc-options:
   - -Wall
@@ -76,16 +73,17 @@ default-extensions:
 
 dependencies:
   - base
+  - dependent-hashmap
+  - dependent-sum
+  - dependent-sum-template
+  - rock
   - text-short
   - unordered-containers
 
 library:
   source-dirs: src
   exposed-modules:
+    - Topoi.Domain.Term
     - Topoi.EvalNbE
-
-executable:
-  source-dirs: app
-  main: CLI/Main.hs
-  dependencies:
-    - topoi
+    - Topoi.TypeCheck
+    - Topoi.Compiler

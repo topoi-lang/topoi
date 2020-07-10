@@ -4,9 +4,9 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 6ec6cb2b1d2cee67debe5cf1b5690489893d19190723cf5ee6a46b6153852cda
+-- hash: 29ae6e5dbc8ecc1f597af83f8ceeec8ef881fcd337727e545b324673991d8907
 
-name:           topoi
+name:           topoi-compiler
 version:        0.1.0.0
 category:       Language
 homepage:       https://github.com/topoi-lang/topoi#readme
@@ -15,8 +15,6 @@ maintainer:     Zheng Yan PEH <zypeh.geek@gmail.com>
 license:        MIT
 license-file:   LICENSE
 build-type:     Simple
-extra-source-files:
-    README.md
 
 source-repository head
   type: git
@@ -24,30 +22,22 @@ source-repository head
 
 library
   exposed-modules:
+      Topoi.Domain.Term
       Topoi.EvalNbE
+      Topoi.TypeCheck
+      Topoi.Compiler
   other-modules:
-      Paths_topoi
+      Paths_topoi_compiler
   hs-source-dirs:
       src
   default-extensions: ApplicativeDo BangPatterns ConstraintKinds DataKinds DefaultSignatures DeriveFoldable DeriveFunctor DeriveGeneric DeriveTraversable DerivingStrategies DefaultSignatures EmptyCase FlexibleContexts FlexibleInstances FunctionalDependencies GADTs GeneralizedNewtypeDeriving InstanceSigs KindSignatures LambdaCase MultiParamTypeClasses MultiWayIf NamedFieldPuns OverloadedStrings PatternSynonyms RankNTypes ScopedTypeVariables StandaloneDeriving TupleSections TypeApplications TypeFamilies TypeOperators
   ghc-options: -Wall -Wcompat -Wincomplete-record-updates -Wincomplete-uni-patterns -Wredundant-constraints
   build-depends:
       base
+    , dependent-hashmap
+    , dependent-sum
+    , dependent-sum-template
+    , rock
     , text-short
-    , unordered-containers
-  default-language: Haskell2010
-
-executable topoi
-  main-is: CLI/Main.hs
-  other-modules:
-      Paths_topoi
-  hs-source-dirs:
-      app
-  default-extensions: ApplicativeDo BangPatterns ConstraintKinds DataKinds DefaultSignatures DeriveFoldable DeriveFunctor DeriveGeneric DeriveTraversable DerivingStrategies DefaultSignatures EmptyCase FlexibleContexts FlexibleInstances FunctionalDependencies GADTs GeneralizedNewtypeDeriving InstanceSigs KindSignatures LambdaCase MultiParamTypeClasses MultiWayIf NamedFieldPuns OverloadedStrings PatternSynonyms RankNTypes ScopedTypeVariables StandaloneDeriving TupleSections TypeApplications TypeFamilies TypeOperators
-  ghc-options: -Wall -Wcompat -Wincomplete-record-updates -Wincomplete-uni-patterns -Wredundant-constraints
-  build-depends:
-      base
-    , text-short
-    , topoi
     , unordered-containers
   default-language: Haskell2010
