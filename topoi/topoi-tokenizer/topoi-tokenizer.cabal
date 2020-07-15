@@ -4,9 +4,9 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 283b84c57186169f4bb788a514696756f4f41211cb73885299104d114bf58f2d
+-- hash: e9e529456daa136233af2affa1b9f3768aee3fb9c2b95af6e07cb33d2ea7fba0
 
-name:           topoi
+name:           topoi-tokenizer
 version:        0.1.0.0
 category:       Language
 homepage:       https://github.com/topoi-lang/topoi#readme
@@ -20,15 +20,18 @@ source-repository head
   type: git
   location: https://github.com/topoi-lang/topoi
 
-executable topoi
-  main-is: Main.hs
+library
+  exposed-modules:
+      Topoi.Compiler.Parser
+      Topoi.Compiler.Parser.Test
   other-modules:
-      Paths_topoi
+      Paths_topoi_tokenizer
   hs-source-dirs:
       src
-  ghc-options: -Wall -Wcompat -Wincomplete-record-updates -Wincomplete-uni-patterns -Wredundant-constraints -threaded -rtsopts -with-rtsopts=-N
+  ghc-options: -Wall -Wcompat -Wincomplete-record-updates -Wincomplete-uni-patterns -Wredundant-constraints
   build-depends:
       base
-    , topoi-compiler
-    , topoi-tokenizer
+    , bytestring
+    , template-haskell
+    , word8
   default-language: Haskell2010

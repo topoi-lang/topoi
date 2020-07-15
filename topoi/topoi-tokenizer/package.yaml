@@ -1,4 +1,4 @@
-name: topoi
+name: topoi-tokenizer
 version: 0.1.0.0
 # synopsis
 # description
@@ -16,13 +16,12 @@ ghc-options:
 
 dependencies:
   - base
-  - topoi-compiler
-  - topoi-tokenizer
+  - bytestring
+  - template-haskell
+  - word8
 
-executable:
+library:
   source-dirs: src
-  main: Main.hs
-  ghc-options:
-  - -threaded
-  - -rtsopts
-  - -with-rtsopts=-N
+  exposed-modules:
+    - Topoi.Compiler.Parser
+    - Topoi.Compiler.Parser.Test

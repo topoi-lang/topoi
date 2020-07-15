@@ -1,0 +1,78 @@
+{-# LANGUAGE DeriveAnyClass #-}
+{-# LANGUAGE OverloadedStrings #-}
+{-# LANGUAGE LambdaCase #-}
+module Topoi.Compiler.Tokenizer where
+
+-- import Data.Bits
+-- import GHC.Word
+-- import Data.Char
+-- import qualified Data.ByteString.Lazy as LBS
+import Data.Binary (Binary (..))
+import qualified HaskellWorks.Data.ByteString as BS
+
+import Text.Megaparsec (SourcePos(..))
+import Text.Megaparsec (Parser)
+
+{-
+
+Topoi tokenizer is designed to be performant enough, for deterministic syntax language, with room to
+add features. The parser also featuring:
+
+  * Low memory footprint
+  * Error message friendly
+  * Produce loseless syntax tree
+
+The tokenizer is fast because it doesn't do value parsing, escape quotes nor remove control
+characters. These are instead left to a higher level parser built on top of our tokenizer.
+
+-}
+
+main' :: IO ()
+main' = do
+  bs <- BS.mmap ""
+  print bs
+
+data Token = Token
+  { tokenPos  :: SourcePos
+  , tokenType :: TokenType
+  } deriving (Eq, Ord, Show)
+
+data TokenType
+  = TokNewline
+  | TokWhitespace
+  | TokEOF
+
+  | TokOpenBracket
+  | TokCloseBracket
+
+  | TokOpenBrace
+  | TokCloseBrace
+
+  | TokOpenParen
+  | TokCloseParen
+
+  | TokUppercaseName String -- ^ identifier that starts with uppercase letters
+  | TokLowercaseName String -- ^ identifier that starts with lowercase letters
+  | TokNumeric Int
+  deriving (Eq, Ord)
+
+instance Show TokenType where
+  show = \case
+    TokNewline -> "\n"
+    TokWhitespace -> " "
+    TokEOF -> ""
+    
+    TokOpenBracket -> "{"
+    TokCloseBracket -> "}"
+
+    TokOpenBrace -> "["
+    TokCloseBrace -> "]"
+
+    TokOpenParen -> "("
+    TokCloseParen -> ")"
+
+    TokUppercaseName s -> s
+    TokLowercaseName s -> s
+    TokNumeric n -> show n
+
+skipWhitespace :: Parser ()

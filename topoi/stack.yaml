@@ -2,6 +2,7 @@ resolver: lts-16.4
 packages:
 - topoi
 - topoi-compiler
+- topoi-tokenizer
 
 extra-deps:
 - constraints-0.11.2
