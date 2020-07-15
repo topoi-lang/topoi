@@ -1,0 +1,13 @@
+module Topoi.Compiler.Tokenizer.Token where
+
+import GHC.Exts
+
+data LineColumn = LineColumn !Int !Int
+
+data Token = Token
+    !LineColumn -- ^ line
+
+data Pos = Pos Addr#
+
+data Span = Span !Pos !Pos
+    deriving (Eq)

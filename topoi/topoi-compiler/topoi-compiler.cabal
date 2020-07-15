@@ -1,10 +1,10 @@
 cabal-version: 1.12
 
--- This file has been generated from package.yaml by hpack version 0.31.2.
+-- This file has been generated from package.yaml by hpack version 0.33.0.
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 29ae6e5dbc8ecc1f597af83f8ceeec8ef881fcd337727e545b324673991d8907
+-- hash: 4adcbe4dfdb0e40627f76ced4a5c098724ab71427536ae91baf4636d7638e290
 
 name:           topoi-compiler
 version:        0.1.0.0
@@ -37,6 +37,7 @@ library
     , dependent-hashmap
     , dependent-sum
     , dependent-sum-template
+    , mtl
     , rock
     , text-short
     , unordered-containers

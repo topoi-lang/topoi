@@ -79,6 +79,7 @@ dependencies:
   - rock
   - text-short
   - unordered-containers
+  - mtl
 
 library:
   source-dirs: src

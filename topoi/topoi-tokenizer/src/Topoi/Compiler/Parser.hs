@@ -19,7 +19,6 @@ import Data.Char (ord)
 import Data.Bits hiding (shift)
 import Data.Foldable
 import Language.Haskell.TH
-import System.IO.Unsafe
 
 data Error e = Default | Custom e
     deriving (Show)
@@ -31,6 +30,8 @@ pattern OK# a addr = (# (# a, addr #) | #)
 
 pattern Err# :: Error e -> Addr# -> Result# e a
 pattern Err# err addr = (# | (# err, addr #) #)
+
+{-# complete OK#, Err# #-}
 
 -- | Get byte length of code point from the first byte
 getUTF8Len# :: Word# -> Int#
