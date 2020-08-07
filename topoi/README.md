@@ -6,7 +6,6 @@ A functional programming language. This is the main monorepo codebase of Topoi p
 ```
 topoi             -- Main files The Terminal UI of the compiler
 topoi-compiler    -- The source code of the compiler
-topoi-lexer       -- Lexer for the topoi language
 ```
 
 ## Issue and Contribution
