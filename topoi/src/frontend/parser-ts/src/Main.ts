@@ -7,14 +7,71 @@ let lexer = moo.compile({
   string:  /"(?:\\["\\]|[^\n"\\])*"/,
   lparen:  '(',
   rparen:  ')',
-  keyword: ['while', 'if', 'else', 'moo', 'cows'],
+  dot: '.',
+  identifier: /[A-Za-z_][\w]*/,
+  keyword: ['while', 'if', 'else', 'let', 'where', 'in'],
   NL:      { match: /\n/, lineBreaks: true },
 })
 
-lexer.reset('while (10) cows\nmoo')
-// const a = lexer.next() // -> { type: 'keyword', value: 'while' }
+class ParserCombinator {
+  private lexer: moo.Lexer
+  // I am writing this simply because moo lexer does not support peek function
+  private currToken: moo.Token | undefined
+  // private errors: any[]
+
+  constructor(lexer: moo.Lexer) {
+    this.lexer = lexer
+    this.currToken = lexer.next()
+  }
+
+  advance(): void { this.currToken = this.lexer.next() }
+
+  allow(tokenType: string): boolean {
+    if (this.currToken?.type === tokenType) {
+      this.advance()
+      return true
+    } else return false
+  }
+
+  expect(tokenType: string): void {
+    if (this.currToken?.type === tokenType) this.advance()
+    else throw new Error(`expect the token ${tokenType}`)
+  }
+
+  expect_exact(tokenType: string, expected: string): void {
+    if (this.currToken?.type === tokenType && this.currToken?.value === expected) this.advance()
+    else throw new Error(`expect the token ${expected}`)
+  }
+
+  mark_start_then_advance(): number {
+    const start_offset = this.currToken?.offset || 0
+    this.advance()
+    return start_offset
+  }
+
+  mark_end_then_advance(): number {
+    const end_offset = (this.currToken?.offset || 0) + (this.currToken?.value.length || 0) - 1
+    this.advance()
+    return end_offset
+  }
+
+  parenPair(): number[] {
+    const start_pos = this.mark_start_then_advance()
+    const end_pos = this.mark_end_then_advance()
+    return [start_pos, end_pos]
+  }
+}
+
+lexer.reset('while aaa.bbb')
+const a = lexer.next() // -> { type: 'keyword', value: 'while' }
 const b = lexer.next() // -> { type: 'WS', value: ' ' }
 const c = lexer.next() // -> { type: 'lparen', value: '(' }
 const d = lexer.next() // -> { type: 'number', value: '10' }
+const e = lexer.next()
 
-console.log(lexer.next(), b, c, d)
+console.log(a, b, c, d, e)
+
+const parser = new ParserCombinator(lexer.reset('()(()'))
+console.log(parser.parenPair())
+console.log(parser.allow('lparen'))
+console.log(parser.parenPair())

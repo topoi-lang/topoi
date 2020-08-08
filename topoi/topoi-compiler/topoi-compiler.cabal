@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 4adcbe4dfdb0e40627f76ced4a5c098724ab71427536ae91baf4636d7638e290
+-- hash: 878e8a5370d3216f59a98cf6870638e7afe788f7b9167012d7c679b3ac334d33
 
 name:           topoi-compiler
 version:        0.1.0.0
@@ -27,6 +27,7 @@ library
       Topoi.TypeCheck
       Topoi.Compiler
   other-modules:
+      Topoi.Parser.Tokenizer
       Paths_topoi_compiler
   hs-source-dirs:
       src
