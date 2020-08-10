@@ -157,18 +157,28 @@
         "affectsGlobalScope": true
       },
       "../src/AbsSynTree.ts": {
-        "version": "9eec6bb8e89dc7c16c02252cb09c6b90a5fca54c74afa06952aa111f19eeeaf3",
-        "signature": "f2b58430ede906a78a042a0db2ba298be1e57f387fc74965c447e56bbeb6823d",
-        "affectsGlobalScope": true
+        "version": "e5a1fb24f22f99f827177f1077a8588f499c12eaadccbcb7a570f9607b237695",
+        "signature": "d3ed302c37693e6f85dfc00f1cd8f556e24f430616a7a8f1f71e7aa6d75e6010",
+        "affectsGlobalScope": false
       },
       "../node_modules/@types/moo/index.d.ts": {
         "version": "b1ec78716c5d8b56d42aaf794020cf81cf479a3df7b3f404028eecef3d794e73",
         "signature": "b1ec78716c5d8b56d42aaf794020cf81cf479a3df7b3f404028eecef3d794e73",
         "affectsGlobalScope": false
       },
+      "../src/Expression.ts": {
+        "version": "43f001fa1f05678abc12cba7eb08e0b6e00320034e25148c4ef5f05378af44f8",
+        "signature": "f65bc69f6daeaf01bda7e9ad6e62de6590fc8ca206cf8e87e80ba452dc828b67",
+        "affectsGlobalScope": false
+      },
       "../src/Main.ts": {
-        "version": "8de0cedc6cfba124165e1d6fe395da75a69e0a500317dbe13e16645e46744001",
+        "version": "019248eb5a9acabda6b0a8d39d11c8f7a742840027c1ff53d43e7db54c5e6034",
         "signature": "8e609bb71c20b858c77f0e9f90bb1319db8477b13f9f965f1a1e18524bf50881",
+        "affectsGlobalScope": false
+      },
+      "../src/Topoi.ts": {
+        "version": "35be274e7a4345589f7842381336dca208a856aef0dcf31fea50178d0b3486f8",
+        "signature": "727c7a9ae320a3d634186028058259e0ed609585be14798d47bd46c2ee2c15d1",
         "affectsGlobalScope": false
       },
       "../node_modules/@types/node/globals.d.ts": {
@@ -1218,7 +1228,26 @@
         "../node_modules/@types/node/ts3.2/util.d.ts",
         "../node_modules/@types/node/util.d.ts"
       ],
+      "../src/Expression.ts": [
+        "../node_modules/@types/moo/index.d.ts",
+        "../node_modules/@types/node/fs.d.ts",
+        "../node_modules/@types/node/process.d.ts",
+        "../node_modules/@types/node/ts3.2/fs.d.ts",
+        "../node_modules/@types/node/ts3.2/process.d.ts",
+        "../node_modules/@types/node/ts3.2/util.d.ts",
+        "../node_modules/@types/node/util.d.ts",
+        "../src/AbsSynTree.ts"
+      ],
       "../src/Main.ts": [
+        "../node_modules/@types/moo/index.d.ts",
+        "../node_modules/@types/node/fs.d.ts",
+        "../node_modules/@types/node/process.d.ts",
+        "../node_modules/@types/node/ts3.2/fs.d.ts",
+        "../node_modules/@types/node/ts3.2/process.d.ts",
+        "../node_modules/@types/node/ts3.2/util.d.ts",
+        "../node_modules/@types/node/util.d.ts"
+      ],
+      "../src/Topoi.ts": [
         "../node_modules/@types/moo/index.d.ts",
         "../node_modules/@types/node/fs.d.ts",
         "../node_modules/@types/node/process.d.ts",
@@ -1994,6 +2023,13 @@
         "../node_modules/@types/node/ts3.2/process.d.ts",
         "../node_modules/@types/node/ts3.2/util.d.ts",
         "../node_modules/@types/node/util.d.ts"
+      ],
+      "../src/Expression.ts": [
+        "../node_modules/@types/moo/index.d.ts",
+        "../src/AbsSynTree.ts"
+      ],
+      "../src/Topoi.ts": [
+        "../node_modules/@types/moo/index.d.ts"
       ]
     },
     "semanticDiagnosticsPerFile": [
@@ -2082,7 +2118,9 @@
       "../node_modules/typescript/lib/lib.scripthost.d.ts",
       "../node_modules/typescript/lib/lib.webworker.importscripts.d.ts",
       "../src/AbsSynTree.ts",
-      "../src/Main.ts"
+      "../src/Expression.ts",
+      "../src/Main.ts",
+      "../src/Topoi.ts"
     ]
   },
   "version": "3.9.7"
