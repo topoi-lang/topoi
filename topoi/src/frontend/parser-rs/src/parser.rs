@@ -3,21 +3,23 @@ use crate::ast::node::{Node};
 use std::ops::Range;
 use std::iter::Peekable;
 
-mod expression;
-mod nested;
+// mod expression;
+// mod nested;
 
-use logos::{SpannedIter, Span};
+use logos::{SpannedIter, Span, Lexer};
 use crate::lexer::{Token};
 
+#[derive(Clone)]
 struct TokenSpan {
     token: Token,
+    slice: Box<str>,
     span: Span,
 }
 
 pub struct Parser<'ast> {
     arena: &'ast Arena,
-    lexerIter: Peekable<SpannedIter<'ast, Token>>,
-    currentToken: Option<TokenSpan>,
+    lexer: Lexer<'ast, Token>,
+    current_token: Option<TokenSpan>,
     errors: Vec<TokenSpan>,
 }
 
@@ -27,23 +29,28 @@ impl<'ast> Parser<'ast> {
 
         Parser {
             arena,
-            lexerIter: logos::Lexer::new(source).spanned().peekable(),
-            currentToken: None,
+            lexer: logos::Lexer::new(source),
+            current_token: None,
             errors: vec![],
         }
     }
 
     fn advance(&mut self) {
-        match self.lexerIter.peek() {
-            Some(&(token, span)) => {
-                self.currentToken = Some(TokenSpan { token, span });
+        match self.lexer.next() {
+            Some(token) => {
+                self.current_token = Some(TokenSpan{
+                    token,
+                    span: self.lexer.span(),
+                    slice: self.lexer.slice().into(),
+                })
             },
             None => unimplemented!("advance to the unknown horizon."),
         }
     }
 
     fn allow(&mut self, token: Token) -> bool {
-        if self.currentToken.unwrap().token == token {
+        let current_token = self.current_token.as_ref().unwrap().token;
+        if current_token == token {
             self.advance();
             true
         } else {
@@ -52,8 +59,8 @@ impl<'ast> Parser<'ast> {
     }
 
     fn push_error(&mut self) {
-        let currentToken = self.currentToken.unwrap();
-        self.errors.push(currentToken)
+        let current_token = self.current_token.as_ref().unwrap();
+        self.errors.push(current_token.clone())
     }
 
 }
