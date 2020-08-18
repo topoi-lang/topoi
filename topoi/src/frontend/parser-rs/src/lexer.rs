@@ -5,6 +5,15 @@ pub enum Token {
     #[token(";")]
     Semicolon,
 
+    #[token("=")]
+    EqualSign,
+
+    #[regex("\n")]
+    Newline,
+
+    #[token("data")]
+    DataKeyword,
+
     #[regex("[a-zA-Z_$][a-zA-Z0-9_$]*")]
     Identifier,
 
@@ -13,6 +22,9 @@ pub enum Token {
 
     // #[regex("\"([^\"\\\\]|\\\\.)*\"")]
     // LiteralString,
+
+    #[token("module")]
+    ModuleKeyword,
 
     #[error]
     UnexpectedToken,

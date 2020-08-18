@@ -5,6 +5,9 @@ use toolshed::{
 use std::ops::Deref;
 use std::fmt::{self, Debug};
 
+pub type Identifier<'ast> = &'ast str;
+pub type IdentifierNode<'ast> = Node<'ast, Identifier<'ast>>;
+
 pub type NodeList<'ast, T> = List<'ast, Node<'ast, T>>;
 
 #[derive(Copy, Clone)]

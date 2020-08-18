@@ -1,10 +1,12 @@
-use toolshed::{Arena};
+use toolshed::{Arena, list::GrowableList};
 use crate::ast::node::{Node};
 use std::ops::Range;
 use std::iter::Peekable;
 
 // mod expression;
 // mod nested;
+// mod statement;
+mod source_unit;
 
 use logos::{SpannedIter, Span, Lexer};
 use crate::lexer::{Token};
@@ -63,4 +65,15 @@ impl<'ast> Parser<'ast> {
         self.errors.push(current_token.clone())
     }
 
+    fn mark_start_span(&mut self) -> u32 {
+        let start = self.lexer.span().start as u32;
+        self.advance();
+        start
+    }
+
+    fn mark_end_span(&mut self) -> u32 {
+        let end = self.lexer.span().end as u32;
+        self.advance();
+        end
+    }
 }
