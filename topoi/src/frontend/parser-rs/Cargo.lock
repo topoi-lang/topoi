@@ -37,14 +37,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "parser-rs"
-version = "0.1.0"
-dependencies = [
- "logos",
- "toolshed",
-]
-
-[[package]]
 name = "proc-macro2"
 version = "1.0.19"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -92,6 +84,29 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "fad945d08550e21c406507e466d948f33a5233812a105fe2490d319268601688"
 dependencies = [
  "rustc-hash",
+]
+
+[[package]]
+name = "topoi-ast"
+version = "0.1.0"
+dependencies = [
+ "toolshed",
+]
+
+[[package]]
+name = "topoi-lexer"
+version = "0.1.0"
+dependencies = [
+ "logos",
+]
+
+[[package]]
+name = "topoi-parser"
+version = "0.1.0"
+dependencies = [
+ "toolshed",
+ "topoi-ast",
+ "topoi-lexer",
 ]
 
 [[package]]

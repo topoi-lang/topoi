@@ -1,14 +1,6 @@
-use toolshed::{
-    CopyCell,
-    list::List,
-};
+use toolshed::CopyCell;
 use std::ops::Deref;
 use std::fmt::{self, Debug};
-
-pub type Identifier<'ast> = &'ast str;
-pub type IdentifierNode<'ast> = Node<'ast, Identifier<'ast>>;
-
-pub type NodeList<'ast, T> = List<'ast, Node<'ast, T>>;
 
 #[derive(Copy, Clone)]
 pub struct Node<'ast, T: 'ast> {

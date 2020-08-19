@@ -1,0 +1,8 @@
+[package]
+name = "topoi-parser"
+version = "0.1.0"
+
+[dependencies]
+toolshed = "*"
+topoi-ast = { path = "../ast" }
+topoi-lexer = { path = "../lexer" }

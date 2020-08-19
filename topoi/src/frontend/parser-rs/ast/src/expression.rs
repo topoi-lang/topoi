@@ -1,17 +1,19 @@
-use super::node::{Node, NodeList};
+use {*};
 
+#[derive(Copy, Clone, Debug, PartialEq)]
 pub enum Expression<'ast> {
     IdentifierExpression(Identifier<'ast>),
     PrimitiveExpression(Primitive<'ast>),
 }
 
 pub type Identifier<'ast> = &'ast str;
+
 #[derive(Copy, Clone, Debug, PartialEq)]
 pub enum Primitive<'ast> {
     Bool(bool),
     IntegerNumber(&'ast str),
-    String(&'ast str),
-    Char(&'ast char),
+    Str(&'ast str),
+    // Char(&'ast char),
 }
 
 pub type ExpressionNode<'ast> = Node<'ast, Expression<'ast>>;

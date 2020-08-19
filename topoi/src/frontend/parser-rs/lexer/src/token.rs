@@ -1,4 +1,4 @@
-pub use logos::{Logos, lookup};
+pub use logos::Logos;
 
 #[derive(PartialEq, Debug, Copy, Clone, Logos)]
 pub enum Token {
@@ -8,7 +8,7 @@ pub enum Token {
     #[token("=")]
     EqualSign,
 
-    #[regex("\n")]
+    #[token("\n")]
     Newline,
 
     #[token("data")]
@@ -26,12 +26,7 @@ pub enum Token {
     #[token("module")]
     ModuleKeyword,
 
+    #[regex(r"[ \f\t\r]", logos::skip)]
     #[error]
     UnexpectedToken,
-}
-
-#[cfg(test)]
-mod test {
-    use super::*;
-
 }
