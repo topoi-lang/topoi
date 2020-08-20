@@ -2,14 +2,12 @@ extern crate toolshed;
 extern crate topoi_lexer as lexer;
 extern crate topoi_ast as ast;
 
-use std::iter::Peekable;
-
 use toolshed::Arena;
-use toolshed::list::GrowableList;
 
 use ast::node::*;
-use lexer::token::Token;
-use lexer::Lexer;
+use lexer::{Token, Lexer};
+
+mod precedence;
 
 pub struct Parser<'ast> {
     arena: &'ast Arena,

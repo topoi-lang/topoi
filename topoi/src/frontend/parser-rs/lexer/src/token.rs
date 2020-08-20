@@ -5,8 +5,11 @@ pub enum Token {
     #[token(";")]
     Semicolon,
 
+    #[token(".")]
+    Accessor,
+
     #[token("=")]
-    EqualSign,
+    Assign,
 
     #[token("\n")]
     Newline,

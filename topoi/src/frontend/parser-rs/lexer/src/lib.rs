@@ -1,5 +1,6 @@
+
 extern crate logos;
 
-pub mod token;
-
-pub use logos::{Lexer, lookup};
+mod token;
+pub use token::Token;
+pub use logos::{Lexer, Logos, lookup};
