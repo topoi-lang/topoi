@@ -1,5 +1,5 @@
 use Parser;
-use ast::expression::*;
+use ast::ExpressionNode;
 use lexer::{Token, Logos, lookup};
 
 #[derive(PartialEq, Eq, PartialOrd, Ord, Copy, Clone)]

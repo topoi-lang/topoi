@@ -23,11 +23,14 @@ pub enum Token {
     #[regex("[0-9]+")]
     LiteralInteger,
 
-    // #[regex("\"([^\"\\\\]|\\\\.)*\"")]
-    // LiteralString,
+    #[regex("\"([^\"\\\\]|\\\\.)*\"")]
+    LiteralString,
 
     #[token("module")]
     ModuleKeyword,
+
+    #[token("where")]
+    WhereKeyword,
 
     #[regex(r"[ \f\t\r]", logos::skip)]
     #[error]

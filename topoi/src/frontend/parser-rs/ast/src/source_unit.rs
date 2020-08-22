@@ -1,38 +1,34 @@
+use {*};
 
 /// `SourceUnit` is the module of topoi code. Every code in topoi is wrapped in
 /// module.
+#[derive(Copy, Clone, Debug)]
 pub enum SourceUnit<'ast> {
     ModuleDirective(ModuleDirective<'ast>),
+    // pub imports: ImportDirective<'ast>,
+    // pub body: SourceUnitPartList<'ast>,
 }
 
+#[derive(Copy, Clone, Debug, PartialEq)]
 pub struct ModuleDirective<'ast> {
     pub module_name: &'ast str,
 }
 
-// #[derive(Clone, Copy, Debug)]
-// pub enum SourceUnit<'ast> {
-//     ModuleDirective(ModuleDirective<'ast>),
-//     SourceBody(SourceBody<'ast>),
-// }
+#[derive(Copy, Clone, Debug)]
+pub enum SourceUnitPart<'ast> {
+    FunctionDefinition(FunctionDefinition<'ast>),
+}
 
-// #[derive(Clone, Copy, Debug)]
-// pub struct ModuleDirective<'ast> {
-//     pub module_name: &'ast str,
-// }
+#[derive(Copy, Clone, Debug)]
+pub struct FunctionDefinition<'ast> {
+    pub name: IdentifierNode<'ast>,
+    pub params: IdentifierNode<'ast>,
+    pub body: ExpressionNode<'ast>,
+}
 
-// #[derive(Clone, Copy, Debug)]
-// pub enum SourceBody<'ast> {
-//     DataTypeDefinition(DataTypeDefinition<'ast>),
-//     ValueDefinition(ValueDefinition<'ast>),
-// }
+pub type SourceUnitPartList<'ast> = NodeList<'ast, SourceUnitPart<'ast>>;
 
-// #[derive(Clone, Copy, Debug)]
-// pub struct DataTypeDefinition<'ast> {
-//     pub data_name: IdentifierNode<'ast>,
-// }
-
-// #[derive(Clone, Copy, Debug)]
-// pub struct ValueDefinition<'ast> {
-//     pub name: IdentifierNode<'ast>,
-//     pub expression: IdentifierNode<'ast>,
-// }
+impl_from! {
+    ModuleDirective => SourceUnit::ModuleDirective,
+    // FunctionDefinition => SourceUnitPart::FunctionDefinition,
+}

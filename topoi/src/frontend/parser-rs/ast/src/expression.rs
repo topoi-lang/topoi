@@ -10,7 +10,7 @@ pub type Identifier<'ast> = &'ast str;
 
 #[derive(Copy, Clone, Debug, PartialEq)]
 pub enum Primitive<'ast> {
-    Bool(bool),
+    // Bool(bool),
     IntegerNumber(&'ast str),
     Str(&'ast str),
     // Char(&'ast char),
