@@ -5,13 +5,12 @@ use {*};
 #[derive(Copy, Clone, Debug)]
 pub enum SourceUnit<'ast> {
     ModuleDirective(ModuleDirective<'ast>),
-    // pub imports: ImportDirective<'ast>,
-    // pub body: SourceUnitPartList<'ast>,
+    SourceUnitPart(SourceUnitPart<'ast>),
 }
 
 #[derive(Copy, Clone, Debug, PartialEq)]
 pub struct ModuleDirective<'ast> {
-    pub module_name: &'ast str,
+    pub module_name: &'ast str
 }
 
 #[derive(Copy, Clone, Debug)]

@@ -6,6 +6,8 @@ mod impl_from;
 mod node;
 pub use node::*;
 
+mod binding;
+
 pub type NodeList<'ast, T> = List<'ast, Node<'ast, T>>;
 pub type Identifier<'ast> = &'ast str;
 pub type IdentifierNode<'ast> = Node<'ast, Identifier<'ast>>;

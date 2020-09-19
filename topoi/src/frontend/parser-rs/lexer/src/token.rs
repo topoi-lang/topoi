@@ -32,6 +32,12 @@ pub enum Token {
     #[token("where")]
     WhereKeyword,
 
+    #[token("let")]
+    LetKeyword,
+
+    #[token("in")]
+    InKeyword,
+
     #[regex(r"[ \f\t\r]", logos::skip)]
     #[error]
     UnexpectedToken,

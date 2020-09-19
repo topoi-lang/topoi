@@ -1,5 +1,3 @@
-use toolshed::list::ListBuilder;
-
 use ast::*;
 use Parser;
 use lexer::Token;
@@ -15,7 +13,7 @@ impl<'ast> Parser<'ast> {
     pub fn module_directive(&mut self) -> Option<SourceUnitNode<'ast>> {
         let start = self.mark_start();
 
-        let next_token = self.lexer.next().unwrap_or(Token::UnexpectedToken);
+        let next_token = self.next();
         if next_token != Token::Identifier {
             eprint!("error occured after the keyword module");
         }
