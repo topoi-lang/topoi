@@ -9,20 +9,19 @@ copyright:          Copyright (c) 2020, Topoi-lang
 category:           Compiler, Language
 extra-source-files: README.md
 
-tested-with:        GHC == 8.8.2 # lts-15.3
-
+tested-with:        GHC == 8.8.4
 dependencies:
 - base >= 4.7 && < 5
-- bytestring >= 0.10
+- bytestring
 - containers
 - lexer-applicative
-- megaparsec >= 8.0.0
+- megaparsec
 - mtl
 - parser-combinators
-- regex-applicative >= 0.3.3
-- srcloc >= 0.5
-- text >= 1.2.4
-- unordered-containers >= 0.2.10
+- regex-applicative
+- srcloc
+- text
+- unordered-containers
 
 executables:
   topoi:

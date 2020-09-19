@@ -93,9 +93,7 @@ lowercaseIdentifierRE =
     <*> (Text.concat <$> many (psym (check (\c -> isAlphaNum c || c == '_'))))
 
 intRE :: RE Text Int
-intRE =
-  read
-    <$> (Text.unpack . Text.concat <$> (some . psym . check $ isDigit))
+intRE = read <$> (Text.unpack . Text.concat <$> (some . psym . check $ isDigit))
 
 contra :: RE Text a -> RE Char a
 contra = comap Text.singleton

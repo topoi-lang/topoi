@@ -13,8 +13,8 @@ import qualified Parse.Utils as U
 import Reporting.Annotation (PosLog)
 import qualified Reporting.Annotation as A
 import Syntax.Concrete
-import qualified Text.Megaparsec as MP
 import Text.Megaparsec hiding (ParseError, Pos, State, parse)
+import qualified Text.Megaparsec as MP
 
 {- Note: Topoi Parser
 ~~~~~~~~~~~~~~~~~~~~~~
@@ -78,6 +78,7 @@ upperIdent = extract f
   where
     f (TokUpperIdent s) = Just s
     f _ = Nothing
+
 -- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 -- TypeSignature
 -- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
